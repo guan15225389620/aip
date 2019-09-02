@@ -49,7 +49,7 @@ app.get('/get_date', function (req, res) {
         console.log(rt);
         result.words_result.forEach(function (e) {
             if (product.test(e.words)) {
-                console.log(e)
+                tagModel
             }else if (burden.test(e.words)){
 
             }else if (code.test(e.words)){
@@ -84,7 +84,7 @@ app.get('/get_date', function (req, res) {
 })
 models.sequelize.sync().then(function () {
 });
-var server = app.listen(8080, function () {
+var server = app.listen(3003, function () {
     var host = server.address().address;
     var port = server.address().port;
     console.log("Server running at http://%s:%s", host, port)
