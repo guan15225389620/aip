@@ -47,32 +47,33 @@ app.get('/get_date', function (req, res) {
         var wt_net = new RegExp('净含量', 'g');
         var nutrition = new RegExp('营养成分', 'g');
         console.log(rt);
+        var model = {}
         result.words_result.forEach(function (e) {
             if (product.test(e.words)) {
-                tagModel
+                model.product = product
             }else if (burden.test(e.words)){
-
+                model.burden = burden
             }else if (code.test(e.words)){
-
+                model.code = code
             }else if (badwordreg.test(e.words)){
-
+                model.badwordreg = badwordreg
             }else if (pd_date.test(e.words)){
-
+                model.pd_date = pd_date
             }else if (EXP.test(e.words)){
-
+                model.EXP = EXP
             }else if (place.test(e.words)){
-
+                model.place = place
             }else if (tel.test(e.words)){
-
+                model.tel = tel
             }else if (wt_net.test(e.words)){
-
+                model.wt_net = wt_net
             }else if (address.test(e.words)){
-
+                model.address = address
             }else if (nutrition.test(e.words)){
-
+                model.nutrition = nutrition
             }
         })
-        var auditwordreg = new RegExp('产品', 'ig');
+
         res.json(200)
         console.log(rt);
     }).catch(function (err) {
