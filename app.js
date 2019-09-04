@@ -4,7 +4,7 @@ var request = require('request')
 var fs = require('fs')
 var models = require('./library/models/index');
 var app = express();
-var tagModel = require('./library/db/ta.js');
+var tagModel = require('./library/db/tag.js');
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.raw());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -47,7 +47,7 @@ app.get('/get_date', function (req, res) {
         var wt_net = new RegExp('净含量', 'g');
         var nutrition = new RegExp('营养成分', 'g');
         var model = {}
-        result.words_result.forEach(function (e) {
+        rt.forEach(function (e) {
             if (product.test(e.words)) {
                 model.product = e
             }else if (burden.test(e.words)){
