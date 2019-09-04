@@ -2,9 +2,9 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request')
 var fs = require('fs')
-var models = require('./library/models/datebase');
+var models = require('./library/models/index');
 var app = express();
-var tagModel = require('./library/db/tag.js');
+var tagModel = require('./library/db/ta.js');
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.raw());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -46,36 +46,40 @@ app.get('/get_date', function (req, res) {
         var tel = new RegExp('电话', 'g');
         var wt_net = new RegExp('净含量', 'g');
         var nutrition = new RegExp('营养成分', 'g');
-        console.log(rt);
         var model = {}
         result.words_result.forEach(function (e) {
             if (product.test(e.words)) {
-                model.product = product
+                model.product = e
             }else if (burden.test(e.words)){
-                model.burden = burden
+                model.burden = e
             }else if (code.test(e.words)){
-                model.code = code
+                model.code = e
             }else if (badwordreg.test(e.words)){
-                model.badwordreg = badwordreg
+                model.badwordreg = e
             }else if (pd_date.test(e.words)){
-                model.pd_date = pd_date
+                model.pd_date = e
             }else if (EXP.test(e.words)){
-                model.EXP = EXP
+                model.EXP = e
             }else if (place.test(e.words)){
-                model.place = place
+                model.place = e
             }else if (tel.test(e.words)){
-                model.tel = tel
+                model.tel = e
             }else if (wt_net.test(e.words)){
-                model.wt_net = wt_net
+                model.wt_net = e
             }else if (address.test(e.words)){
-                model.address = address
+                model.address = e
             }else if (nutrition.test(e.words)){
-                model.nutrition = nutrition
+                model.nutrition = e
             }
         })
 
-        res.json(200)
-        console.log(rt);
+        tagModel.insert(model, function (err) {
+            if (err) {
+                console.error('>> url err : ', model.url)
+            }
+            callback();
+        })
+
     }).catch(function (err) {
         // 如果发生网络错误
         console.log(err);
