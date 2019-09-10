@@ -30,10 +30,9 @@ var image = fs.readFileSync(__dirname + '/51566358844_.pic_hd.jpg');
 // });
 
 app.get('/get_date', function (req, res) {
-    res.writeHead(200, {'Content-Type': 'application/json;charset=utf-8'});
     var base64Img = new Buffer(image).toString('base64');
     client.generalBasic(base64Img).then(function (result) {
-        var rt = JSON.stringify(result.words_result)
+        var rt = result.words_result
         // tagModel.
         var product = new RegExp('产品名称', 'g');
         var burden = new RegExp('配料', 'g');
@@ -72,13 +71,13 @@ app.get('/get_date', function (req, res) {
                 model.nutrition = e
             }
         })
-
-        tagModel.insert(model, function (err) {
-            if (err) {
-                console.error('>> url err : ', model.url)
-            }
-            callback();
-        })
+        res.json(model)
+        // tagModel.insert(model, function (err) {
+        //     if (err) {
+        //         console.error('>> url err : ', model.url)
+        //     }
+        //     callback();
+        // })
 
     }).catch(function (err) {
         // 如果发生网络错误
