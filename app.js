@@ -86,7 +86,7 @@ app.get('/get_date', function (req, res) {
 
     }).catch(function (err) {
         // 如果发生网络错误
-        console.log(err);
+        console.log(err,'timeout');
     });
     ;
 
