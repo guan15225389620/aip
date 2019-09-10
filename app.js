@@ -28,10 +28,12 @@ var image = fs.readFileSync(__dirname + '/51566358844_.pic_hd.jpg');
 //         res.end(JSON.stringify(result));
 //     });
 // });
-app.get('/test',function (req,res){
-    res.send(200)
+app.get('/healthz', function (req, res) {
+    res.send('OK')
 })
+
 app.get('/get_date', function (req, res) {
+    res.writeHead(200, {'Content-Type': 'application/json;charset=utf-8'});
     var base64Img = new Buffer(image).toString('base64');
     client.generalBasic(base64Img).then(function (result) {
         var rt = result.words_result
@@ -48,6 +50,7 @@ app.get('/get_date', function (req, res) {
         var wt_net = new RegExp('净含量', 'g');
         var nutrition = new RegExp('营养成分', 'g');
         var model = {}
+        console.log(rt)
         rt.forEach(function (e) {
             if (product.test(e.words)) {
                 model.product = e
@@ -73,7 +76,7 @@ app.get('/get_date', function (req, res) {
                 model.nutrition = e
             }
         })
-        res.json(model)
+        console.log(model)
         // tagModel.insert(model, function (err) {
         //     if (err) {
         //         console.error('>> url err : ', model.url)
