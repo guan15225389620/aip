@@ -28,7 +28,9 @@ var image = fs.readFileSync(__dirname + '/51566358844_.pic_hd.jpg');
 //         res.end(JSON.stringify(result));
 //     });
 // });
-
+app.get('/test',function (req,res){
+    res.send(200)
+})
 app.get('/get_date', function (req, res) {
     var base64Img = new Buffer(image).toString('base64');
     client.generalBasic(base64Img).then(function (result) {
