@@ -1,7 +1,12 @@
 
 
 
-app.get('/get_date', function (req, res) {
+
+
+
+
+
+app.get('/get_data', function (req, res) {
     res.writeHead(200, {'Content-Type': 'application/json;charset=utf-8'});
     var base64Img = new Buffer(image).toString('base64');
     client.generalBasic(base64Img).then(function (result) {
@@ -19,7 +24,7 @@ app.get('/get_date', function (req, res) {
         var wt_net = new RegExp('净含量', 'g');
         var nutrition = new RegExp('营养成分', 'g');
         var model = {}
-        console.log(rt)
+        console.log(result)
         rt.forEach(function (e) {
             if (product.test(e.words)) {
                 model.product = e
@@ -45,7 +50,7 @@ app.get('/get_date', function (req, res) {
                 model.nutrition = e
             }
         })
-        console.log(model)
+
         // tagModel.insert(model, function (err) {
         //     if (err) {
         //         console.error('>> url err : ', model.url)
@@ -61,7 +66,10 @@ app.get('/get_date', function (req, res) {
 
 })
 
+app.get('/update_data', function (req, res) {
 
+
+})
 
 app.get('/healthz', function (req, res) {
     res.send('OK')
