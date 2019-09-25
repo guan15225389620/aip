@@ -14,4 +14,10 @@ sequelize = exports.sequelize_db   = new Sequelize('tz', 'admin', '123456',  {
     },
 });
 console.log('init postgres done');
-exports.tags = sequelize.import(path.join(__dirname, 'tag.js'));
+
+
+
+
+exports.tag = sequelize.import(path.join(__dirname, 'tag.js'));
+exports.login = sequelize.import(path.join(__dirname, 'login.js'));
+exports.chat = sequelize.import(path.join(__dirname, 'chat.js'));
