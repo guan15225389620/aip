@@ -73,8 +73,7 @@ app.post("/upload", (req, res) => {
     })
 })
 app.post("/login", (req, res) => {
-    console.log(res)
-    var code = res.body.code;
+    var code = req.body.code;
     var opt = {
         method: 'GET',
         url: 'https://api.weixin.qq.com/sns/jscode2session?appid=' + appid + '&secret=' + secret + '&js_code=' + code + '&grant_type=authorization_code'
