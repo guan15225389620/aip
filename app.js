@@ -73,6 +73,7 @@ app.post("/upload", (req, res) => {
     })
 })
 app.post("/login", (req, res) => {
+    console.log(res)
     var code = res.body.code;
     var opt = {
         method: 'GET',
@@ -99,7 +100,7 @@ app.post("/login", (req, res) => {
             })
 
         } else {
-
+            res.json({code:' err'})
         }
     })
 
