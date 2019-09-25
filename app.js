@@ -9,6 +9,8 @@ var image = require("imageinfo");
 var models = require('./library/models/index');
 var app = express();
 var tagModel = require('./library/db/tag.js');
+var loginModel = require('./library/db/login.js');
+var chatModel = require('./library/db/chat.js');
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.raw());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -20,7 +22,8 @@ app.use(express.static('upload'))
 var APP_ID = "16705811";
 var API_KEY = "hCPrFHK1Wjz39PoXgxdvlOs1";
 var SECRET_KEY = "VMejCjXNP3qbioZ8OrBwvqpz9cKWiv5a";
-
+const appid = 'wx1cb6c6220c4d9926';
+const secret = 'fe31ac5dd73208e7e80a98bf026300ba';
 var client = new AipOcr(APP_ID, API_KEY, SECRET_KEY);
 
 var image = fs.readFileSync(__dirname + '/51566358844_.pic_hd.jpg');
@@ -69,6 +72,51 @@ app.post("/upload", (req, res) => {
         })
     })
 })
+app.post("/login", (req, res) => {
+    var code = res.body.code;
+    var opt = {
+        method: 'GET',
+        url: 'https://api.weixin.qq.com/sns/jscode2session?appid=' + appid + '&secret=' + secret + '&js_code=' + code + '&grant_type=authorization_code'
+    };
+    request(opt, function (err, res, body) {
+        console.log(body , 'body.openid ')
+        if (!err) {
+            var openid = body.openid
+            var model = {
+                openid: openid
+            }
+            loginModel.find({openid: openid}, function (res) {
+                if (res) {
+                    res.json({returnid: -1})
+                } else {
+                    tagModel.insert(model, function (err) {
+                        if (err) {
+                            console.error('>> loginModel err : ', model.url)
+                        }
+                        res.json({returnid:openid})
+                    })
+                }
+            })
+
+        } else {
+
+        }
+    })
+
+})
+
+// app.post("/getChatId", (req, res) => {
+//     var code = res.body.code;
+//
+//     request(opt, function (err, res, body) {
+//         if (!err) {
+//             res.json({returnid: body})
+//         } else {
+//             res.json({returnid: -1})
+//         }
+//     })
+//
+// })
 
 app.get('/get_date', function (req, res) {
     res.writeHead(200, {'Content-Type': 'application/json;charset=utf-8'});
@@ -107,9 +155,8 @@ app.get('/get_date', function (req, res) {
         console.log(model)
         tagModel.insert(model, function (err) {
             if (err) {
-                console.error('>> url err : ', model.url)
+                console.error('>> tagModel err : ', model.url)
             }
-            callback();
         })
 
     }).catch(function (err) {

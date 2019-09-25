@@ -1,5 +1,5 @@
-var models = require('../models/chat');
-var model = exports.model = models.propaganda;
+var models = require('../models/login');
+var model = exports.model = models.chat;
 var util = require('util');
 
 //保存

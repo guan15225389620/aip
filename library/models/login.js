@@ -1,8 +1,7 @@
 module.exports = function (sequelize, DataTypes) {
-    var m = sequelize.define('preselection', {
+    var m = sequelize.define('login', {
         id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-        subject: DataTypes.STRING,
-        content: DataTypes.STRING
+        openid: DataTypes.INTEGER,
     });
     return m;
 };
