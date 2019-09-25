@@ -72,8 +72,8 @@ app.post("/upload", (req, res) => {
         })
     })
 })
-app.post("/login", (req, res) => {
-    var code = req.body.code;
+app.get("/login", (req, res) => {
+    var code ='oEFuB4VX3JzIOxlu20LUYc2cRml8';
     var opt = {
         method: 'GET',
         url: 'https://api.weixin.qq.com/sns/jscode2session?appid=' + appid + '&secret=' + secret + '&js_code=' + code + '&grant_type=authorization_code'
@@ -84,10 +84,7 @@ app.post("/login", (req, res) => {
             var model = {
                 openid: openid
             }
-            loginModel.model.findAll({
-                where: {openid: openid},
-                raw: true
-            }).then(function (task) {
+            models.sequelize_db.query("SELECT openid FROM tz WHERE openid = ?", {replacements: [openid]}).spread(function (tasks) {
                 if (task) {
                     res.json({returnid: -1})
                 } else {
@@ -101,6 +98,8 @@ app.post("/login", (req, res) => {
                     })
                 }
             })
+
+
         } else {
             res.json({err_code: err})
         }
@@ -218,7 +217,7 @@ function test() {
     });
 }
 
-models.sequelize.sync().then(function () {
+models.sequelize_db.sync().then(function () {
 });
 var server = app.listen(3003, function () {
     var host = server.address().address;

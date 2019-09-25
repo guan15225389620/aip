@@ -3,7 +3,7 @@ var path = require('path');
 var Sequelize = exports.Sequelize = require('sequelize');
 
 // 数据库配置
-sequelize = exports.sequelize   = new Sequelize('tz', 'admin', '123456',  {
+sequelize = exports.sequelize_db   = new Sequelize('tz', 'admin', '123456',  {
     host: 'localhost',    //数据库地址,默认本机
     port:'5432',
     dialect: 'postgres',
