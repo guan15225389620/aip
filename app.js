@@ -79,27 +79,30 @@ app.post("/login", (req, res) => {
         url: 'https://api.weixin.qq.com/sns/jscode2session?appid=' + appid + '&secret=' + secret + '&js_code=' + code + '&grant_type=authorization_code'
     };
     request(opt, function (err, res, body) {
-        console.log(body , 'body.openid ')
         if (!err) {
             var openid = body.openid
             var model = {
                 openid: openid
             }
-            loginModel.find({openid: openid}, function (res) {
-                if (res) {
+            loginModel.model.findAll({
+                where: {openid: openid},
+                raw: true
+            }).then(function (task) {
+                if (task) {
                     res.json({returnid: -1})
                 } else {
-                    tagModel.insert(model, function (err) {
+                    loginModel.insert(model, function (err) {
                         if (err) {
                             console.error('>> loginModel err : ', model.url)
+                            res.json({returnid: -1})
+                        } else {
+                            res.json({returnid: openid})
                         }
-                        res.json({returnid:openid})
                     })
                 }
             })
-
         } else {
-            res.json({code:' err'})
+            res.json({err_code: err})
         }
     })
 

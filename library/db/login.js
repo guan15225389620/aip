@@ -7,6 +7,15 @@ exports.save = function (m, callback) {
     m.save(callback);
 };
 
+//添加
+exports.insert = function (m, callback) {
+    model.create(m).then(function (ret) {
+        callback(null,ret)
+    }).catch(function (err) {
+        callback(err)
+    });
+}
+
 //删除
 exports.remove = function (id, callback) {
     model.remove({_id: id}, callback);
@@ -27,6 +36,6 @@ exports.findAll = function (field, where, callback) {
     model.find(where, field).exec(callback);
 };
 
-exports.findAllByPrimary = function (field, where, callback) {
-    model.find(where, field).read('primary').exec(callback);
-};
+exports.findBySQL = function (sql, callback) {
+    models.sequelize_db.query(sql).spread(callback);
+}
