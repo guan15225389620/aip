@@ -5,7 +5,7 @@ var fs = require('fs');
 var path = require("path");
 var formidable = require("formidable");
 var image = require("imageinfo");
-
+var formidable = require("formidable");
 var models = require('./library/models/index');
 var app = express();
 var tagModel = require('./library/db/tag.js');
@@ -61,8 +61,10 @@ app.post("/upload", (req, res) => {
     var form = new formidable.IncomingForm();//既处理表单，又处理文件上传
     let uploadDir = path.join(__dirname, "library/upload/");
     form.uploadDir = uploadDir;//本地文件夹目录路径
-
+    console.log(req,'ssss')
     form.parse(req, (err, fields, files) => {
+        console.log(files);
+        console.log(fields);
         let oldPath = files.cover.path;//图片的本地路径
         console.log(files.cover.name)//图片传过来的名字
         let newPath = path.join(path.dirname(oldPath), files.cover.name);
@@ -123,7 +125,7 @@ app.post("/getChatId", (req, res) => {
     }
     chatModel.insert(model, function (err, ret) {
         if (err) {
-            console.error('>> getChatId err : ', model ,err )
+            console.error('>> getChatId err : ', model, err)
             res.json({chatid: -1})
         } else {
             res.json({chatid: model.chatid})
