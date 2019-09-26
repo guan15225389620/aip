@@ -72,7 +72,7 @@ app.post("/upload", (req, res) => {
         })
     })
 })
-app.get("/login", (req, res) => {
+app.post("/login", (req, res) => {
     var code =req.body.code;
     var opt = {
         method: 'GET',

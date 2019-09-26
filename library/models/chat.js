@@ -4,6 +4,16 @@ module.exports = function (sequelize, DataTypes) {
         chatid:DataTypes.INTEGER,
         openid: DataTypes.STRING,
         ocr: {type: DataTypes.JSON}
-    })
+    }, {
+        indexes: [
+            {
+                fields: ['chatid'],
+            },{
+                fields: ['openid'],
+            }
+        ],
+        timestamps: false,
+        tableName: 'chat'
+    });
     return m;
 };

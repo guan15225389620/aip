@@ -14,6 +14,14 @@ module.exports = function (sequelize, DataTypes) {
         EXP:DataTypes.JSONB,
         nutrition:DataTypes.JSONB,
         create_date: {type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW}
+    }, {
+        indexes: [
+            {
+                fields: ['id']
+            }
+        ],
+        timestamps: false,
+        tableName: 'tag'
     });
     return m;
 };
