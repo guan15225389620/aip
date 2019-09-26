@@ -1,4 +1,4 @@
-var models = require('../models/nrv');
+var models = require('../models');
 var model = exports.model = models.nrv;
 var util = require('util');
 

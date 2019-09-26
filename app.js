@@ -74,7 +74,7 @@ app.post("/upload", (req, res) => {
 })
 app.post("/login", (req, res) => {
     var code =req.body.code;
-    // var code ='oEFuB4vx3jZioXLU20lUYc2cRmL8'
+    // var code = 'oEFuB4vx3jZioXLU20lUYc2cRmL8'
     var opt = {
         method: 'GET',
         url: 'https://api.weixin.qq.com/sns/jscode2session?appid=' + appid + '&secret=' + secret + '&js_code=' + code + '&grant_type=authorization_code'
@@ -82,23 +82,28 @@ app.post("/login", (req, res) => {
     request(opt, function (err, result, body) {
         if (!err) {
             var openid = JSON.parse(body).openid
-            var model = {
-                openid: openid
-            }
-            models.sequelize_db.query("SELECT openid FROM login WHERE openid = ?", {replacements: [openid]}).spread(function (tasks) {
-                if (tasks) {
-                    res.json({returnid: -1})
-                } else {
-                    loginModel.insert(model, function (err) {
-                        if (err) {
-                            console.error('>> loginModel err : ', model.url)
-                            res.json({returnid: -1})
-                        } else {
-                            res.json({returnid: openid})
-                        }
-                    })
+            if (typeof (openid) === "undefined") {
+                res.json({returnid: -1})
+            } else {
+                var model = {
+                    openid: openid
                 }
-            })
+                models.sequelize_db.query("SELECT id FROM login WHERE openid = ?", {replacements: [openid]}).spread(function (tasks) {
+                    if (tasks.length > 0) {
+                        console.log(tasks,'tasks')
+                        res.json({returnid: tasks[0].id})
+                    } else {
+                        loginModel.insert(model, function (err, ret) {
+                            if (err) {
+                                console.error('>> loginModel err : ', model.openid)
+                                res.json({returnid: -1})
+                            } else {
+                                res.json({returnid: ret.id})
+                            }
+                        })
+                    }
+                })
+            }
 
 
         } else {

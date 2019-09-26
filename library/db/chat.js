@@ -1,4 +1,4 @@
-var models = require('../models/chat');
+var models = require('../models');
 var model = exports.model = models.chat;
 var util = require('util');
 

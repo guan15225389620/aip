@@ -1,4 +1,4 @@
-var models = require('../models/require');
+var models = require('../models');
 var model = exports.model = models.require;
 var util = require('util');
 
@@ -10,7 +10,7 @@ exports.save = function (m, callback) {
 //删除
 exports.remove = function (id, callback) {
     model.remove({_id: id}, callback);
-}
+}login
 
 //修改
 exports.update = function (id, doc, callback) {
