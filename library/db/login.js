@@ -1,5 +1,5 @@
 var models = require('../models');
-var model = exports.model = models.chat;
+var model = exports.model = models.login;
 var util = require('util');
 
 //保存
