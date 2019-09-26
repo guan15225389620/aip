@@ -74,18 +74,19 @@ app.post("/upload", (req, res) => {
 })
 app.post("/login", (req, res) => {
     var code =req.body.code;
+    // var code ='oEFuB4vx3jZioXLU20lUYc2cRmL8'
     var opt = {
         method: 'GET',
         url: 'https://api.weixin.qq.com/sns/jscode2session?appid=' + appid + '&secret=' + secret + '&js_code=' + code + '&grant_type=authorization_code'
     };
-    request(opt, function (err, res, body) {
+    request(opt, function (err, result, body) {
         if (!err) {
             var openid = JSON.parse(body).openid
             var model = {
                 openid: openid
             }
             models.sequelize_db.query("SELECT openid FROM login WHERE openid = ?", {replacements: [openid]}).spread(function (tasks) {
-                if (task) {
+                if (tasks) {
                     res.json({returnid: -1})
                 } else {
                     loginModel.insert(model, function (err) {
