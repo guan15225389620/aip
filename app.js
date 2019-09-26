@@ -73,7 +73,7 @@ app.post("/upload", (req, res) => {
     })
 })
 app.post("/login", (req, res) => {
-    var code =req.body.code;
+    var code = req.body.code;
     // var code = 'oEFuB4vx3jZioXLU20lUYc2cRmL8'
     var opt = {
         method: 'GET',
@@ -90,7 +90,7 @@ app.post("/login", (req, res) => {
                 }
                 models.sequelize_db.query("SELECT id FROM login WHERE openid = ?", {replacements: [openid]}).spread(function (tasks) {
                     if (tasks.length > 0) {
-                        console.log(tasks,'tasks')
+                        console.log(tasks, 'tasks')
                         res.json({returnid: tasks[0].id})
                     } else {
                         loginModel.insert(model, function (err, ret) {
@@ -113,18 +113,23 @@ app.post("/login", (req, res) => {
 
 })
 
-// app.post("/getChatId", (req, res) => {
-//     var code = res.body.code;
-//
-//     request(opt, function (err, res, body) {
-//         if (!err) {
-//             res.json({returnid: body})
-//         } else {
-//             res.json({returnid: -1})
-//         }
-//     })
-//
-// })
+app.post("/getChatId", (req, res) => {
+    var code = req.body.code;
+    var chatid = GenNonDuplicateID(2)
+
+    var model = {
+        chatid: timestamp
+    }
+    loginModel.insert(model, function (err, ret) {
+        if (err) {
+            console.error('>> getChatId err : ', model.chatid)
+            res.json({chatid: -1})
+        } else {
+            res.json({chatid: model.chatid})
+        }
+    })
+
+})
 
 app.get('/get_date', function (req, res) {
     res.writeHead(200, {'Content-Type': 'application/json;charset=utf-8'});
@@ -174,7 +179,14 @@ app.get('/get_date', function (req, res) {
 
 })
 
+
+// 生成不重复的ID
+function GenNonDuplicateID(randomLength) {
+    return Number(Math.random().toString().substr(3, randomLength) + Date.now()).toString(36)
+}
+
 // test()
+
 
 function test() {
     var base64Img = new Buffer(image).toString('base64');
