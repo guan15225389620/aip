@@ -118,7 +118,7 @@ app.post("/getChatId", (req, res) => {
     var chatid = GenNonDuplicateID(2)
 
     var model = {
-        chatid: timestamp
+        chatid: chatid
     }
     chatModel.insert(model, function (err, ret) {
         if (err) {

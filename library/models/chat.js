@@ -3,6 +3,7 @@ module.exports = function (sequelize, DataTypes) {
         id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
         chatid:DataTypes.INTEGER,
         openid: DataTypes.STRING,
+        loginid: DataTypes.STRING,
         ocr: {type: DataTypes.JSON}
     }, {
         indexes: [
