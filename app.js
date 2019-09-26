@@ -120,7 +120,7 @@ app.post("/getChatId", (req, res) => {
     var model = {
         chatid: timestamp
     }
-    loginModel.insert(model, function (err, ret) {
+    chatModel.insert(model, function (err, ret) {
         if (err) {
             console.error('>> getChatId err : ', model.chatid)
             res.json({chatid: -1})
