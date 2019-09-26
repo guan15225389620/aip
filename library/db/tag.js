@@ -39,3 +39,4 @@ exports.findAll = function (field, where, callback) {
 
 exports.findBySQL = function (sql, callback) {
     models.sequelize_db.query(sql).spread(callback);
+}

@@ -115,7 +115,7 @@ app.post("/login", (req, res) => {
 
 app.post("/getChatId", (req, res) => {
     var loginid = req.body.code;
-    var chatid = GenNonDuplicateID(2)
+    var chatid = GenNonDuplicateID(2)；
 
     var model = {
         chatid: chatid,
