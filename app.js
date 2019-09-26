@@ -84,7 +84,7 @@ app.post("/login", (req, res) => {
             var model = {
                 openid: openid
             }
-            models.sequelize_db.query("SELECT openid FROM logins WHERE openid = ?", {replacements: [openid]}).spread(function (tasks) {
+            models.sequelize_db.query("SELECT openid FROM login WHERE openid = ?", {replacements: [openid]}).spread(function (tasks) {
                 if (task) {
                     res.json({returnid: -1})
                 } else {
