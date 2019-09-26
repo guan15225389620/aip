@@ -123,7 +123,7 @@ app.post("/getChatId", (req, res) => {
     }
     chatModel.insert(model, function (err, ret) {
         if (err) {
-            console.error('>> getChatId err : ', model.chatid)
+            console.error('>> getChatId err : ', model ,err )
             res.json({chatid: -1})
         } else {
             res.json({chatid: model.chatid})
