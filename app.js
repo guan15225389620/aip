@@ -3,7 +3,6 @@ var bodyParser = require('body-parser');
 var request = require('request');
 var fs = require('fs');
 var path = require("path");
-var formidable = require("formidable");
 var image = require("imageinfo");
 var formidable = require("formidable");
 var models = require('./library/models/index');
@@ -59,19 +58,30 @@ app.get('/healthz', function (req, res) {
 
 app.post("/upload", (req, res) => {
     var form = new formidable.IncomingForm();//既处理表单，又处理文件上传
-    let uploadDir = path.join(__dirname, "library/upload/");
+    let uploadDir = path.join(__dirname, "library/upload/" + req.headers.chatid);
     form.uploadDir = uploadDir;//本地文件夹目录路径
-    console.log(req,'ssss')
+
     form.parse(req, (err, fields, files) => {
-        console.log(files);
-        console.log(fields);
-        let oldPath = files.cover.path;//图片的本地路径
-        console.log(files.cover.name)//图片传过来的名字
-        let newPath = path.join(path.dirname(oldPath), files.cover.name);
-        var downUrl = "http://localhost:" + listenNumber + "/upload/" + files.cover.name;//这里是想传回图片的链接
-        fs.rename(oldPath, newPath, () => {
-            res.json({downUrl: downUrl})
-        })
+        var file = files.fileName
+        var oldname = uploadDir + '/' + file.name
+        var extname = path.extname(file.name);
+        var newname = uploadDir + '/' + GenNonDuplicateID(1) + extname;
+        console.log(filePath, 'filePath <<<')
+        fs.rename(oldpath, newpath, function (err) {
+            if (err) {
+                throw  Error("改名失败");
+                res.json({ocr: -1})
+            } else {
+                ocr(newname, function (result) {
+                    if (result != 'err') {
+                        res.json({ocr: result})
+                    } else {
+                        res.json({ocr: -1})
+                    }
+
+                })
+            }
+        });
     })
 })
 app.post("/login", (req, res) => {
@@ -118,7 +128,6 @@ app.post("/login", (req, res) => {
 app.post("/getChatId", (req, res) => {
     var loginid = req.body.code;
     var chatid = GenNonDuplicateID(2);
-
     var model = {
         chatid: chatid,
         loginid: loginid
@@ -128,11 +137,70 @@ app.post("/getChatId", (req, res) => {
             console.error('>> getChatId err : ', model, err)
             res.json({chatid: -1})
         } else {
-            res.json({chatid: model.chatid})
+            var folder = path.join(__dirname, "library/upload/" + chatid);
+
+            fs.mkdir(folder, {recursive: true}, (err) => {
+                if (err) {
+                    throw err
+                    res.json({chatid: -1})
+                } else {
+
+                    res.json({chatid: model.chatid})
+                }
+
+            });
+
+
         }
     })
 
 })
+
+
+ocr(image, function (date) {
+    console.log(date)
+})
+
+function ocr(image, callback) {
+    var base64Img = new Buffer(image).toString('base64');
+    client.generalBasic(base64Img).then(function (result) {
+        var model = {}
+        var rt = result.words_result
+        rt.forEach(function (e, i) {
+            if (product.test(e.words)) {
+                model.product = e
+            } else if (burden.test(e.words)) {
+                model.burden = e
+            } else if (code.test(e.words)) {
+                model.code = e
+            } else if (sc.test(e.words)) {
+                model.badwordreg = e
+            } else if (pd_date.test(e.words)) {
+                model.pd_date = e
+            } else if (EXP.test(e.words)) {
+                model.EXP = e
+            } else if (place.test(e.words)) {
+                model.place = e
+            } else if (tel.test(e.words)) {
+                model.tel = e
+            } else if (wt_net.test(e.words)) {
+                model.wt_net = e
+            } else if (address.test(e.words)) {
+                model.address = e
+            } else if (energy.test(e.words) || protein.test(e.words) || fat.test(e.words) || na.test(e.words) || cbd.test(e.words)) {
+
+                console.log(e, i)
+                console.log(rt[i + 1])
+                // model.nutrition = e
+            }
+        })
+        callback(model)
+    }).catch(function (err) {
+        // 如果发生网络错误
+        callback('err')
+        console.log(err, 'timeout');
+    });
+}
 
 app.get('/get_date', function (req, res) {
     res.writeHead(200, {'Content-Type': 'application/json;charset=utf-8'});
