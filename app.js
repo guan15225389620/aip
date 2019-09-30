@@ -98,11 +98,11 @@ app.get('/healthz', function (req, res) {
 })
 
 app.post('/getOcrText', function (req, res) {
-    var ocrText = req.body.ocrText;
+    var ocrtext = req.body.ocrText;
     var chatid = req.body.chatid;
 
     if(ocrText && chatid){
-       var ocr = ocrText(ocrText)
+       var ocr = ocrText(ocrtext)
         res.json(ocr)
     }else{
         res.send('err')
