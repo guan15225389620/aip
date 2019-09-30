@@ -217,46 +217,46 @@ ocr(image, function (date) {
 })
 
 
-function ocr(image, callback) {
-    var base64Img = new Buffer(image).toString('base64');
-    client.generalBasic(base64Img).then(function (result) {
-        var model = {}
-        var rt = result.words_result
-        rt.forEach(function (e, i) {
-            if (product.test(e.words)) {
-                model.product = e
-            } else if (burden.test(e.words)) {
-                model.burden = e
-            } else if (code.test(e.words)) {
-                model.code = e
-            } else if (sc.test(e.words)) {
-                model.badwordreg = e
-            } else if (pd_date.test(e.words)) {
-                model.pd_date = e
-            } else if (EXP.test(e.words)) {
-                model.EXP = e
-            } else if (place.test(e.words)) {
-                model.place = e
-            } else if (tel.test(e.words)) {
-                model.tel = e
-            } else if (wt_net.test(e.words)) {
-                model.wt_net = e
-            } else if (address.test(e.words)) {
-                model.address = e
-            } else if (energy.test(e.words) || protein.test(e.words) || fat.test(e.words) || na.test(e.words) || cbd.test(e.words)) {
-
-                console.log(e, i)
-                console.log(rt[i + 1])
-                // model.nutrition = e
-            }
-        })
-        callback(model)
-    }).catch(function (err) {
-        // 如果发生网络错误
-        callback('err')
-        console.log(err, 'timeout');
-    });
-}
+// function ocr(image, callback) {
+//     var base64Img = new Buffer(image).toString('base64');
+//     client.generalBasic(base64Img).then(function (result) {
+//         var model = {}
+//         var rt = result.words_result
+//         rt.forEach(function (e, i) {
+//             if (product.test(e.words)) {
+//                 model.product = e
+//             } else if (burden.test(e.words)) {
+//                 model.burden = e
+//             } else if (code.test(e.words)) {
+//                 model.code = e
+//             } else if (sc.test(e.words)) {
+//                 model.badwordreg = e
+//             } else if (pd_date.test(e.words)) {
+//                 model.pd_date = e
+//             } else if (EXP.test(e.words)) {
+//                 model.EXP = e
+//             } else if (place.test(e.words)) {
+//                 model.place = e
+//             } else if (tel.test(e.words)) {
+//                 model.tel = e
+//             } else if (wt_net.test(e.words)) {
+//                 model.wt_net = e
+//             } else if (address.test(e.words)) {
+//                 model.address = e
+//             } else if (energy.test(e.words) || protein.test(e.words) || fat.test(e.words) || na.test(e.words) || cbd.test(e.words)) {
+//
+//                 console.log(e, i)
+//                 console.log(rt[i + 1])
+//                 // model.nutrition = e
+//             }
+//         })
+//         callback(model)
+//     }).catch(function (err) {
+//         // 如果发生网络错误
+//         callback('err')
+//         console.log(err, 'timeout');
+//     });
+// }
 
 app.get('/get_date', function (req, res) {
     res.writeHead(200, {'Content-Type': 'application/json;charset=utf-8'});
