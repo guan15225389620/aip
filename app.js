@@ -122,7 +122,7 @@ app.post("/upload", (req, res) => {
         var oldname = uploadDir + '/' + file.name
         var extname = path.extname(file.name);
         var newname = uploadDir + '/' + GenNonDuplicateID(1) + extname;
-        fs.rename(oldpath, newpath, function (err) {
+        fs.rename(oldname, newname, function (err) {
             if (err) {
                 throw  Error("改名失败");
                 res.json({ocr: -1})
