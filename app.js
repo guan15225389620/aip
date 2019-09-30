@@ -117,7 +117,7 @@ app.post("/upload", (req, res) => {
 
     form.parse(req, (err, fields, files) => {
         var file = files.fileName
-        var oldname = uploadDir + '/' + file.name
+        var oldname = file.path
         var extname = path.extname(file.name);
         var newname = uploadDir + '/' + GenNonDuplicateID(1) + extname;
         fs.rename(oldname, newname, function (err) {
