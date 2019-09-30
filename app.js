@@ -27,6 +27,47 @@ var client = new AipOcr(APP_ID, API_KEY, SECRET_KEY);
 
 var image = fs.readFileSync(__dirname + '/51566358844_.pic_hd.jpg');
 
+
+
+function ocr(str) {
+    var arr = {
+        'product': ['品名'],
+        'burden': ['配料', '原料'],
+        'weight': ['净含量'],
+        'code': ['产品标准代号', '产品标准'],
+        'msg': ['产地', '联系方式', '地址', '生产商', '生产者', '联系方式', '电话', '传真', '经销商', '经销者', '网址', '网站', '邮政', '邮件'],
+        'date': ['生产日期', '保质期', '时间'],
+        'storage': ['贮存条件'],
+        'sc': ['生产许可证编号', 'sc', '食证字', '生产许可'],
+    }
+
+    var ocr = []
+
+
+    var key = Object.keys(arr)
+
+    for (var  k in key) {
+        var index = str.length;
+        var item = {}
+        for (j = 0; j < arr[(key[k])].length; j++) {
+
+            var i = str.indexOf(arr[(key[k])][j])
+            if (i < index && i != -1) {
+                index = i
+            }
+        }
+        item[(key[k])] = index
+        ocr.push(item)
+    }
+    return ocr
+}
+
+
+
+
+
+
+
 // tagModel.
 var product = new RegExp('产品名称', 'g');
 var burden = new RegExp('配料', 'g');
@@ -56,6 +97,21 @@ app.get('/healthz', function (req, res) {
     res.send('OK')
 })
 
+app.post('/getOcrText', function (req, res) {
+    var ocrText = req.body.ocrText;
+    var chatid = req.body.chatid;
+
+    if(ocrText && chatid){
+       var ocr = ocr(ocrText)
+        res.json(ocr)
+    }else{
+        res.send('err')
+
+    }
+
+})
+
+
 app.post("/upload", (req, res) => {
     var form = new formidable.IncomingForm();//既处理表单，又处理文件上传
     let uploadDir = path.join(__dirname, "library/upload/" + req.headers.chatid);
@@ -66,7 +122,6 @@ app.post("/upload", (req, res) => {
         var oldname = uploadDir + '/' + file.name
         var extname = path.extname(file.name);
         var newname = uploadDir + '/' + GenNonDuplicateID(1) + extname;
-        console.log(filePath, 'filePath <<<')
         fs.rename(oldpath, newpath, function (err) {
             if (err) {
                 throw  Error("改名失败");
@@ -160,6 +215,7 @@ app.post("/getChatId", (req, res) => {
 ocr(image, function (date) {
     console.log(date)
 })
+
 
 function ocr(image, callback) {
     var base64Img = new Buffer(image).toString('base64');
