@@ -257,56 +257,57 @@ app.post("/getChatId", (req, res) => {
 // })
 
  function errCode(json){
-    var errCode = {};
-    var error = ''
-    var coloer = 0
-     for(var i =0 ;i<json.length;i++){
-        if(Object.keys(json[i])[0]){
-            if(!json[i][Object.keys(json[i])[0]]){
-            error = error + Object.keys(json[i])[0] + '识别结果为空' + '\n';
-            coloer = 1
-          
-        }else if ((Object.keys(json[i])[0] == 'burden')){
-                if((json[i][Object.keys(json[i])[0]].indexOf('配方表')>0) || (json[i][Object.keys(json[i])[0]].indexOf('成分')>0) || (json[i][Object.keys(json[i])[0]].indexOf('主要配料')>0)){
+        var errCode = {}
+        var error = ''
+        var coloer = 0
+         for(var i =0 ;i<json.length;i++){
+            if(Object.keys(json[i])[0]){
+                if(!json[i][Object.keys(json[i])[0]]){
+                error = error + Object.keys(json[i])[0] + '识别结果为空' + '\n';
+                coloer = 1
+              
+            }else if ((Object.keys(json[i])[0] == 'burden')){
+                    if((json[i][Object.keys(json[i])[0]].indexOf('配方表')>-1) || (json[i][Object.keys(json[i])[0]].indexOf('成分')>-1) || (json[i][Object.keys(json[i])[0]].indexOf('主要配料')>-1)){
+                        coloer = 2
+                        error = error + Object.keys(json[i])[0] + '引导词出错' + '\n';
+                    }
+                }else if ((Object.keys(json[i])[0] == 'weight')){
+        
+        
+                }else if ((Object.keys(json[i])[0] == 'sc')){
+                    console.log(json[i][Object.keys(json[i])[0]].indexOf('qs'))
+                    if((json[i][Object.keys(json[i])[0]].indexOf('qs')>-1)){
+                        coloer = 2
+                        error = error + Object.keys(json[i])[0] + 'qs标注不正确 违反了 GB-7718 2011 （4.1.9）条款' + '\n';
+                    }
+        
+                }else if ((Object.keys(json[i])[0] == 'code')){
+                   // DB-、DSS、QB(/T)、GB(/T)、GB/7、GB/(T)、GB/:、13738(.)2
+                   if((json[i][Object.keys(json[i])[0]].indexOf('DB-')>-1) ||(json[i][Object.keys(json[i])[0]].indexOf('DSS')>-1) ||(json[i][Object.keys(json[i])[0]].indexOf('QB/')>-1) || (json[i][Object.keys(json[i])[0]].indexOf('GB/')>-1)){
                     coloer = 2
-                    error = error + Object.keys(json[i])[0] + '引导词出错' + '\n';
+                    error = error + Object.keys(json[i])[0] + '标准书写错误 违反了 GB-7718 2011 （4.1.10）条款' + '\n';
                 }
-            }else if ((Object.keys(json[i])[0] == 'weight')){
-    
-    
-            }else if ((Object.keys(json[i])[0] == 'sc')){
-                if((json[i][Object.keys(json[i])[0]].indexOf('qs')>0)){
-                    coloer = 2
-                    error = error + Object.keys(json[i])[0] + 'qs标注不正确 违反了 GB-7718 2011 （4.1.9）条款' + '\n';
+                }else if ((Object.keys(json[i])[0] == 'date')){
+                    if((json[i][Object.keys(json[i])[0]].indexOf('生产日期')<0) || (json[i][Object.keys(json[i])[0]].indexOf('保质期')<0)){
+                        coloer = 2
+                        error = error + Object.keys(json[i])[0] + '未标注生产日期或保质期 违反了 GB-7718 2011 （4.1.7.1）条款' + '\n';
+                    }
+        
+                }else if ((Object.keys(json[i])[0] == 'product')){
+        
+        
+                }else if ((Object.keys(json[i])[0] == 'msg')){
+                    if((json[i][Object.keys(json[i])[0]].indexOf('电话')<0) && (json[i][Object.keys(json[i])[0]].indexOf('传真')< 0) && (json[i][Object.keys(json[i])[0]].indexOf('网')<0) &&(json[i][Object.keys(json[i])[0]].indexOf('邮')<0)){
+                        coloer = 2
+                        error = error + Object.keys(json[i])[0] + '违反了 GB-7718 2011 （4.1.6.2）条款' + '\n';
+                    }
                 }
-    
-            }else if ((Object.keys(json[i])[0] == 'code')){
-               // DB-、DSS、QB(/T)、GB(/T)、GB/7、GB/(T)、GB/:、13738(.)2
-               if((json[i][Object.keys(json[i])[0]].indexOf('DB-')>0) ||(json[i][Object.keys(json[i])[0]].indexOf('DSS')>0) ||(json[i][Object.keys(json[i])[0]].indexOf('QB/')>0) || (json[i][Object.keys(json[i])[0]].indexOf('GB/')>0)){
-                coloer = 2
-                error = error + Object.keys(json[i])[0] + '标准书写错误 违反了 GB-7718 2011 （4.1.10）条款' + '\n';
             }
-            }else if ((Object.keys(json[i])[0] == 'date')){
-                if((json[i][Object.keys(json[i])[0]].indexOf('生产日期')<0) || (json[i][Object.keys(json[i])[0]].indexOf('保质期')<0)){
-                    coloer = 2
-                    error = error + Object.keys(json[i])[0] + '未标注生产日期或保质期 违反了 GB-7718 2011 （4.1.7.1）条款' + '\n';
-                }
-    
-            }else if ((Object.keys(json[i])[0] == 'product')){
-    
-    
-            }else if ((Object.keys(json[i])[0] == 'msg')){
-                if((json[i][Object.keys(json[i])[0]].indexOf('电话')<0) && (json[i][Object.keys(json[i])[0]].indexOf('传真')< 0) && (json[i][Object.keys(json[i])[0]].indexOf('网')<0) &&(json[i][Object.keys(json[i])[0]].indexOf('邮')<0)){
-                    coloer = 2
-                    error = error + Object.keys(json[i])[0] + '违反了 GB-7718 2011 （4.1.6.2）条款' + '\n';
-                }
-            }
-        }
+         }
+         errCode.error = error;
+         errCode.coloer = coloer
+        return  errCode
      }
-     errCode.error = error;
-     errCode.coloer = coloer
-    return  errCode
- }
 
 
 function ocr(image, callback) {
