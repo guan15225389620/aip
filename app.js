@@ -61,10 +61,10 @@ function ocrText(str) {
     var s = jsonSort(ocr);
 
 
-    for (g = 0; g < s.length; g++) {
-        if ((Object.values(s[g])[0]) != str.length) {
+     for (g = 0; g < s.length; g++) {
+        if ( s[g][(Object.keys(s[g])[0])] != str.length) {
 
-            s[g][(Object.keys(s[g])[0])] = (g != (s.length-1))? str.substring(Object.values(s[g])[0],Object.values(s[g+1])[0]): str.substring(Object.values(s[g])[0],Object.values(s[g+1])[0])
+            s[g][(Object.keys(s[g])[0])] = (g != (s.length-1))? str.substring(s[g][Object.keys(s[g])[0]],s[g+1][Object.keys(s[g+1])[0]]): str.substring(s[g][Object.keys(s[g])[0]],s[g+1][Object.keys(s[g+1])[0]])
 
 
         }else {
@@ -75,15 +75,16 @@ function ocrText(str) {
 }
 
 
+
 var json = [{product: 1}, {burden: 15}, {weight: 0}, {code: 50}, {msg: 130}, {date: 97}, {storage: 0}, {sc: 73}]
 
 function jsonSort(json) {
 
     for (var j = 1; j < json.length; j++) {
         var temp = json[j],
-            val = Object.values(temp),
+            val =  temp[Object.keys(temp)[0]],
             i = j - 1
-        while (i >= 0 && Object.values(json[i])[0] > val) {
+        while (i >= 0 && json[i][Object.keys(json[i])[0]] > val) {
             json[i + 1] =  json[i];
             i = i - 1;
         }
