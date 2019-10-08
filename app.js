@@ -257,6 +257,7 @@ app.post("/getChatId", (req, res) => {
 // })
 
  function errCode(json){
+    var errCode = {};
     var error = ''
     var coloer = 0
      for(var i =0 ;i<json.length;i++){
