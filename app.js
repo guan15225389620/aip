@@ -28,7 +28,6 @@ var client = new AipOcr(APP_ID, API_KEY, SECRET_KEY);
 // var image = fs.readFileSync(__dirname + '/51566358844_.pic_hd.jpg');
 
 
-
 function ocrText(str) {
     var arr = {
         'product': ['品名'],
@@ -46,7 +45,7 @@ function ocrText(str) {
 
     var key = Object.keys(arr)
 
-    for (var  k in key) {
+    for (var k in key) {
         var index = str.length;
         var item = {}
         for (j = 0; j < arr[(key[k])].length; j++) {
@@ -59,11 +58,39 @@ function ocrText(str) {
         item[(key[k])] = index
         ocr.push(item)
     }
-    return ocr
+    var s = jsonSort(ocr);
+
+
+    for (g = 0; g < s.length; g++) {
+        if ((Object.values(s[g])[0]) != str.length) {
+
+            s[g][(Object.keys(s[g])[0])] = (g != (s.length-1))? str.substring(Object.values(s[g])[0],Object.values(s[g+1])[0]): str.substring(Object.values(s[g])[0],Object.values(s[g+1])[0])
+
+
+        }else {
+            s[g][(Object.keys(s[g])[0])] = ''
+        }
+    }
+    return s
 }
 
 
+var json = [{product: 1}, {burden: 15}, {weight: 0}, {code: 50}, {msg: 130}, {date: 97}, {storage: 0}, {sc: 73}]
 
+function jsonSort(json) {
+
+    for (var j = 1; j < json.length; j++) {
+        var temp = json[j],
+            val = Object.values(temp),
+            i = j - 1
+        while (i >= 0 && Object.values(json[i])[0] > val) {
+            json[i + 1] =  json[i];
+            i = i - 1;
+        }
+        json[i+1] = temp
+    }
+return json
+}
 
 
 
@@ -101,10 +128,24 @@ app.post('/getOcrText', function (req, res) {
     var ocrtext = req.body.ocrText;
     var chatid = req.body.chatid;
 
-    if(ocrText && chatid){
-       var ocr = ocrText(ocrtext)
+    if (ocrText && chatid) {
+        var ocr = ocrText(ocrtext)
+
         res.json(ocr)
-    }else{
+    } else {
+        res.send('err')
+    }
+})
+
+
+app.post('/updateOcrText', function (req, res) {
+    var ocrtext = req.body.ocrText;
+    var chatid = req.body.chatid;
+
+    if (ocrText && chatid) {
+        //数据库更新
+        res.json(ocr)
+    } else {
         res.send('err')
     }
 })
@@ -221,9 +262,9 @@ function ocr(image, callback) {
         var model = {}
         var rt = result.words_result
 
-        if(result.error_code){
+        if (result.error_code) {
             callback('err')
-        }else {
+        } else {
             rt.forEach(function (e, i) {
                 if (product.test(e.words)) {
                     model.product = e
