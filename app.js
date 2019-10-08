@@ -31,13 +31,13 @@ var client = new AipOcr(APP_ID, API_KEY, SECRET_KEY);
 function ocrText(str) {
     var arr = {
         'product': ['品名'],
-        'burden': ['配料', '原料'],
+        'burden': ['配料', '原料','配方表','成分','主要配料'],
         'weight': ['净含量'],
         'code': ['产品标准代号', '产品标准'],
         'msg': ['产地', '联系方式', '地址', '生产商', '生产者', '联系方式', '电话', '传真', '经销商', '经销者', '网址', '网站', '邮政', '邮件'],
         'date': ['生产日期', '保质期', '时间'],
         'storage': ['贮存条件'],
-        'sc': ['生产许可证编号', 'sc', '食证字', '生产许可'],
+        'sc': ['生产许可证编号', 'sc', '食证字', '生产许可','qs'],
     }
 
     var ocr = []
@@ -144,7 +144,7 @@ app.post('/updateOcrText', function (req, res) {
 
     if (tableText && chatid) {
         //数据库更新
-        res.json(ocr)
+        res.json(errCode(tableText))
     } else {
         res.send('err')
     }
@@ -254,6 +254,57 @@ app.post("/getChatId", (req, res) => {
 // ocr(image, function (date) {
 //     console.log(date)
 // })
+
+ function errCode(json){
+    var error = ''
+    var coloer = 0
+     for(var i =0 ;i<json.length;i++){
+        if(Object.keys(json[i])[0]){
+            if(!json[i][Object.keys(json[i])[0]]){
+            error = error + Object.keys(json[i])[0] + '识别结果为空' + '\n';
+            coloer = 1
+          
+        }else if ((Object.keys(json[i])[0] == 'burden')){
+                if((json[i][Object.keys(json[i])[0]].indexOf('配方表')>0) || (json[i][Object.keys(json[i])[0]].indexOf('成分')>0) || (json[i][Object.keys(json[i])[0]].indexOf('主要配料')>0)){
+                    coloer = 2
+                    error = error + Object.keys(json[i])[0] + '引导词出错' + '\n';
+                }
+            }else if ((Object.keys(json[i])[0] == 'weight')){
+    
+    
+            }else if ((Object.keys(json[i])[0] == 'sc')){
+                if((json[i][Object.keys(json[i])[0]].indexOf('qs')>0)){
+                    coloer = 2
+                    error = error + Object.keys(json[i])[0] + 'qs标注不正确 违反了 GB-7718 2011 （4.1.9）条款' + '\n';
+                }
+    
+            }else if ((Object.keys(json[i])[0] == 'code')){
+               // DB-、DSS、QB(/T)、GB(/T)、GB/7、GB/(T)、GB/:、13738(.)2
+               if((json[i][Object.keys(json[i])[0]].indexOf('DB-')>0) ||(json[i][Object.keys(json[i])[0]].indexOf('DSS')>0) ||(json[i][Object.keys(json[i])[0]].indexOf('QB/')>0) || (json[i][Object.keys(json[i])[0]].indexOf('GB/')>0)){
+                coloer = 2
+                error = error + Object.keys(json[i])[0] + '标准书写错误 违反了 GB-7718 2011 （4.1.10）条款' + '\n';
+            }
+            }else if ((Object.keys(json[i])[0] == 'date')){
+                if((json[i][Object.keys(json[i])[0]].indexOf('生产日期')<0) || (json[i][Object.keys(json[i])[0]].indexOf('保质期')<0)){
+                    coloer = 2
+                    error = error + Object.keys(json[i])[0] + '未标注生产日期或保质期 违反了 GB-7718 2011 （4.1.7.1）条款' + '\n';
+                }
+    
+            }else if ((Object.keys(json[i])[0] == 'product')){
+    
+    
+            }else if ((Object.keys(json[i])[0] == 'msg')){
+                if((json[i][Object.keys(json[i])[0]].indexOf('电话')<0) && (json[i][Object.keys(json[i])[0]].indexOf('传真')< 0) && (json[i][Object.keys(json[i])[0]].indexOf('网')<0) &&(json[i][Object.keys(json[i])[0]].indexOf('邮')<0)){
+                    coloer = 2
+                    error = error + Object.keys(json[i])[0] + '违反了 GB-7718 2011 （4.1.6.2）条款' + '\n';
+                }
+            }
+        }
+     }
+     errCode.error = error;
+     errCode.coloer = coloer
+    return  errCode
+ }
 
 
 function ocr(image, callback) {
