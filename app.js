@@ -139,10 +139,10 @@ app.post('/getOcrText', function (req, res) {
 
 
 app.post('/updateOcrText', function (req, res) {
-    var ocrtext = req.body.ocrText;
+    var tableText = req.body.tableText;
     var chatid = req.body.chatid;
 
-    if (ocrText && chatid) {
+    if (tableText && chatid) {
         //数据库更新
         res.json(ocr)
     } else {
