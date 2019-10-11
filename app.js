@@ -27,7 +27,17 @@ var client = new AipOcr(APP_ID, API_KEY, SECRET_KEY);
 
 // var image = fs.readFileSync(__dirname + '/51566358844_.pic_hd.jpg');
 
+function ban(str,arr){
+    for(var i =0;i<arr.length;i++){
+        console.log(arr[i])
+    }
 
+}
+
+
+const food_ban = ['猴头' , '肠衣' , '豆油' , '太阳蛋' , '方包片' , '球包菜' , '组织蛋白' , '糖烯' , '口服葡萄糖' , '活力钙' , '调味品' , '闽姜' , '糕饼专用油' , '小香' , '香料' , '香精' , '鲜肉' , '碘盐' , '酵母提取物' , '棕油' , '味料' , '陈年老汤' , 'I+G']
+const burden_ban = []
+const add_ban = []
 function ocrText(str) {
     var arr = {
         'product': ['品名'],
@@ -38,6 +48,7 @@ function ocrText(str) {
         'date': ['生产日期', '保质期', '时间'],
         'storage': ['贮存条件'],
         'sc': ['生产许可证编号', 'sc', '食证字', '生产许可','qs'],
+        'birth':['营养成分表']
     }
 
     var ocr = []
@@ -62,15 +73,26 @@ function ocrText(str) {
 
 
      for (g = 0; g < s.length; g++) {
-        if ( s[g][(Object.keys(s[g])[0])] != str.length) {
+        if ( s[g][(Object.keys(s[g])[0])] != str.length && (Object.keys(s[g])[0] != 'birth')) {
 
             s[g][(Object.keys(s[g])[0])] = (g != (s.length-1))? str.substring(s[g][Object.keys(s[g])[0]],s[g+1][Object.keys(s[g+1])[0]]): str.substring(s[g][Object.keys(s[g])[0]],s[g+1][Object.keys(s[g+1])[0]])
 
 
         }else {
-            s[g][(Object.keys(s[g])[0])] = ''
+
+                s[g][(Object.keys(s[g])[0])] = ''
+
         }
     }
+
+    for (g = 0; g < s.length; g++) {
+        if((Object.keys(s[g])[0] === 'birth')){
+            s.splice(g,1)
+
+        }
+    }
+
+
     return s
 }
 
@@ -282,7 +304,7 @@ app.post("/getChatId", (req, res) => {
                     }
         
                 }else if ((Object.keys(json[i])[0] == 'code')){
-                   // DB-、DSS、QB(/T)、GB(/T)、GB/7、GB/(T)、GB/:、13738(.)2
+                   // DB-' , 'DSS、QB(/T)、GB(/T)、GB/7、GB/(T)、GB/:、13738(.)2
                    if((json[i][Object.keys(json[i])[0]].indexOf('DB-')>-1) ||(json[i][Object.keys(json[i])[0]].indexOf('DSS')>-1) ||(json[i][Object.keys(json[i])[0]].indexOf('QB/')>-1) || (json[i][Object.keys(json[i])[0]].indexOf('GB/')>-1)){
                     coloer = 2
                     error = error + Object.keys(json[i])[0] + '标准书写错误 违反了 GB-7718 2011 （4.1.10）条款' + '\n';
