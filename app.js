@@ -27,28 +27,27 @@ var client = new AipOcr(APP_ID, API_KEY, SECRET_KEY);
 
 // var image = fs.readFileSync(__dirname + '/51566358844_.pic_hd.jpg');
 
-function ban(str,arr){
-    for(var i =0;i<arr.length;i++){
-        console.log(arr[i])
-    }
-
-}
 
 
-const food_ban = ['猴头' , '肠衣' , '豆油' , '太阳蛋' , '方包片' , '球包菜' , '组织蛋白' , '糖烯' , '口服葡萄糖' , '活力钙' , '调味品' , '闽姜' , '糕饼专用油' , '小香' , '香料' , '香精' , '鲜肉' , '碘盐' , '酵母提取物' , '棕油' , '味料' , '陈年老汤' , 'I+G']
-const burden_ban = []
-const add_ban = []
+
+var burdens = [['burden_ban', '猴头', '肠衣', '豆油', '太阳蛋', '方包片', '球包菜', '组织蛋白', '糖烯', '口服葡萄糖', '活力钙', '调味品', '闽姜', '糕饼专用油', '小香', '香料', '香精', '鲜肉', '碘盐', '酵母提取物', '棕油', '味料', '陈年老汤', 'I+G'
+],
+    ['food_ban', '蟾酥', '藜芦', '颠茄', '雷公藤', '雄黄', '硫磺', '斑蝥', '黄花夹竹桃', '雪上一枝蒿', '铃兰', '铁棒槌', '莽草', '鬼臼', '骆驼蓬', '杠柳皮', '香加皮', '草乌', '砒霜', '红砒', '白砒', '砒石', '牵牛子', '洋金花', '洋地黄', '鱼藤', '青娘虫', '闹羊花', '河豚', '昆明山海棠', '京大戟', '丽江山慈姑', '羊踯躅', '羊角拗', '红粉', '红茴香', '红豆杉', '红升丹', '罂粟壳', '米壳', '朱砂', '夹竹桃', '八角莲', '八里麻', '千金子', '土青木香', '山莨菪', '川乌', '广防己', '马桑叶', '马钱子', '六角莲', '天仙子', '巴豆', '水银', '长春花', '甘遂', '生天南星', '生半夏', '生白附子', '生狼毒', '白降丹', '石蒜', '关木通', '农吉痢'],
+    ['add_ban', 'VC钠', '异VC钠', '味素', 'HBA-BN10', '5-呈味核苷酸二钠', 'α-淀粉酶', '笨甲酸钠', '食品添剂', '香精', '红曲米粉', '牛膏']
+]
+
+
 function ocrText(str) {
     var arr = {
         'product': ['品名'],
-        'burden': ['配料', '原料','配方表','成分','主要配料'],
+        'burden': ['配料', '原料', '配方表', '成分', '主要配料'],
         'weight': ['净含量'],
         'code': ['产品标准代号', '产品标准'],
         'msg': ['产地', '联系方式', '地址', '生产商', '生产者', '联系方式', '电话', '传真', '经销商', '经销者', '网址', '网站', '邮政', '邮件'],
         'date': ['生产日期', '保质期', '时间'],
         'storage': ['贮存条件'],
-        'sc': ['生产许可证编号', 'sc', '食证字', '生产许可','qs'],
-        'birth':['营养成分表']
+        'sc': ['生产许可证编号', 'sc', '食证字', '生产许可', 'qs'],
+        'birth': ['营养成分表']
     }
 
     var ocr = []
@@ -71,23 +70,23 @@ function ocrText(str) {
     }
     var s = jsonSort(ocr);
 
-console.log(s)
-     for (g = 0; g < s.length; g++) {
-        if ( s[g][(Object.keys(s[g])[0])] != str.length && (Object.keys(s[g])[0] != 'birth')) {
+    console.log(s)
+    for (g = 0; g < s.length; g++) {
+        if (s[g][(Object.keys(s[g])[0])] != str.length && (Object.keys(s[g])[0] != 'birth')) {
 
-            s[g][(Object.keys(s[g])[0])] = (g != (s.length-1))? str.substring(s[g][Object.keys(s[g])[0]],s[g+1][Object.keys(s[g+1])[0]]): str.substring(s[g][Object.keys(s[g])[0]],s[g+1][Object.keys(s[g+1])[0]])
+            s[g][(Object.keys(s[g])[0])] = (g != (s.length - 1)) ? str.substring(s[g][Object.keys(s[g])[0]], s[g + 1][Object.keys(s[g + 1])[0]]) : str.substring(s[g][Object.keys(s[g])[0]], s[g + 1][Object.keys(s[g + 1])[0]])
 
 
-        }else {
+        } else {
 
-                s[g][(Object.keys(s[g])[0])] = ''
+            s[g][(Object.keys(s[g])[0])] = ''
 
         }
     }
 
     for (g = 0; g < s.length; g++) {
-        if((Object.keys(s[g])[0] === 'birth')){
-            s.splice(g,1)
+        if ((Object.keys(s[g])[0] === 'birth')) {
+            s.splice(g, 1)
 
         }
     }
@@ -97,25 +96,20 @@ console.log(s)
 }
 
 
-
-var json = [{product: 1}, {burden: 15}, {weight: 0}, {code: 50}, {msg: 130}, {date: 97}, {storage: 0}, {sc: 73}]
-
 function jsonSort(json) {
-
+    console.log(json)
     for (var j = 1; j < json.length; j++) {
         var temp = json[j],
-            val =  temp[Object.keys(temp)[0]],
+            val = temp[Object.keys(temp)[0]],
             i = j - 1
         while (i >= 0 && json[i][Object.keys(json[i])[0]] > val) {
-            json[i + 1] =  json[i];
+            json[i + 1] = json[i];
             i = i - 1;
         }
-        json[i+1] = temp
+        json[i + 1] = temp
     }
-return json
+    return json
 }
-
-
 
 
 // tagModel.
@@ -278,58 +272,93 @@ app.post("/getChatId", (req, res) => {
 //     console.log(date)
 // })
 
- function errCode(json){
-        var errCode = {}
-        var error = ''
-        var coloer = 0
-         for(var i =0 ;i<json.length;i++){
-            if(Object.keys(json[i])[0]){
-                if(!json[i][Object.keys(json[i])[0]]){
+
+function ban(str, burden) {
+    var res = '';
+    var warn = '';
+
+    for(var n=0;n<burden.length;n++){
+        var arr = burden[n]
+        if (arr[0] == 'add_ban') {
+            warn =  ' 未标示GB 2760中的通用名称,违反GB-7718 2011（4.1.3.1.4）' + '\n'
+        } else if (arr[0] == 'food_ban') {
+            warn = ' 非食品原料出现在配料表中,违反《食品安全法》第三十八条' + '\n'
+        } else if (arr[0] == 'burden_ban') {
+            warn = '  不符合相关国家标准规定的名称,违反GB-7718 2011（4.1.3.1）' + '\n'
+        }
+
+        for (var i = 1; i < arr.length; i++) {
+            if (str.indexOf(arr[i]) > -1) {
+                res = res + arr[i] + warn
+            }
+        }
+    }
+    return res
+}
+
+function errCode(json) {
+    var errCode = {}
+    var error = ''
+    var coloer = 0
+    for (var i = 0; i < json.length; i++) {
+        if (Object.keys(json[i])[0]) {
+            if (!json[i][Object.keys(json[i])[0]]) {
                 error = error + Object.keys(json[i])[0] + '识别结果为空' + '\n';
                 coloer = 1
-              
-            }else if ((Object.keys(json[i])[0] == 'burden')){
-                    if((json[i][Object.keys(json[i])[0]].indexOf('配方表')>-1) || (json[i][Object.keys(json[i])[0]].indexOf('成分')>-1) || (json[i][Object.keys(json[i])[0]].indexOf('主要配料')>-1)){
-                        coloer = 2
-                        error = error + Object.keys(json[i])[0] + '引导词出错' + '\n';
-                    }
-                }else if ((Object.keys(json[i])[0] == 'weight')){
-        
-        
-                }else if ((Object.keys(json[i])[0] == 'sc')){
-                    console.log(json[i][Object.keys(json[i])[0]].indexOf('qs'))
-                    if((json[i][Object.keys(json[i])[0]].indexOf('qs')>-1)){
-                        coloer = 2
-                        error = error + Object.keys(json[i])[0] + 'qs标注不正确 违反了 GB-7718 2011 （4.1.9）条款' + '\n';
-                    }
-        
-                }else if ((Object.keys(json[i])[0] == 'code')){
-                   // DB-' , 'DSS、QB(/T)、GB(/T)、GB/7、GB/(T)、GB/:、13738(.)2
-                   if((json[i][Object.keys(json[i])[0]].indexOf('DB-')>-1) ||(json[i][Object.keys(json[i])[0]].indexOf('DSS')>-1) ||(json[i][Object.keys(json[i])[0]].indexOf('QB/')>-1) || (json[i][Object.keys(json[i])[0]].indexOf('GB/')>-1)){
+
+            } else if ((Object.keys(json[i])[0] == 'burden')) {
+                var burden = json[i][Object.keys(json[i])[0]];
+                if ((burden.indexOf('配方表') > -1) || (burden.indexOf('成分') > -1) || (burden.indexOf('主要配料') > -1)) {
+                    coloer = 2
+                    error = error + Object.keys(json[i])[0] + '引导词出错' + '\n';
+                }
+
+                var warn = ban(burden,burdens);
+                if(warn){
+                   error = error + warn
+                    coloer = 2
+                }
+
+            } else if ((Object.keys(json[i])[0] == 'weight')) {
+
+
+            } else if ((Object.keys(json[i])[0] == 'sc')) {
+               var sc = json[i][Object.keys(json[i])[0]];
+                if ((sc.indexOf('qs') > -1)) {
+                    coloer = 2
+                    error = error + Object.keys(json[i])[0] + 'qs标注不正确 违反了 GB-7718 2011 （4.1.9）条款' + '\n';
+                }
+
+            } else if ((Object.keys(json[i])[0] == 'code')) {
+                // DB-' , 'DSS、QB(/T)、GB(/T)、GB/7、GB/(T)、GB/:、13738(.)2
+                var code = json[i][Object.keys(json[i])[0]];
+                if ((code.indexOf('DB-') > -1) || (code.indexOf('DSS') > -1) || (code.indexOf('QB/') > -1) || (code.indexOf('GB/') > -1)) {
                     coloer = 2
                     error = error + Object.keys(json[i])[0] + '标准书写错误 违反了 GB-7718 2011 （4.1.10）条款' + '\n';
                 }
-                }else if ((Object.keys(json[i])[0] == 'date')){
-                    if((json[i][Object.keys(json[i])[0]].indexOf('生产日期')<0) || (json[i][Object.keys(json[i])[0]].indexOf('保质期')<0)){
-                        coloer = 2
-                        error = error + Object.keys(json[i])[0] + '未标注生产日期或保质期 违反了 GB-7718 2011 （4.1.7.1）条款' + '\n';
-                    }
-        
-                }else if ((Object.keys(json[i])[0] == 'product')){
-        
-        
-                }else if ((Object.keys(json[i])[0] == 'msg')){
-                    if((json[i][Object.keys(json[i])[0]].indexOf('电话')<0) && (json[i][Object.keys(json[i])[0]].indexOf('传真')< 0) && (json[i][Object.keys(json[i])[0]].indexOf('网')<0) &&(json[i][Object.keys(json[i])[0]].indexOf('邮')<0)){
-                        coloer = 2
-                        error = error + Object.keys(json[i])[0] + '违反了 GB-7718 2011 （4.1.6.2）条款' + '\n';
-                    }
+            } else if ((Object.keys(json[i])[0] == 'date')) {
+                var date = json[i][Object.keys(json[i])[0]];
+                if ((date.indexOf('生产日期') < 0) || (date.indexOf('保质期') < 0)) {
+                    coloer = 2
+                    error = error + Object.keys(json[i])[0] + '未标注生产日期或保质期 违反了 GB-7718 2011 （4.1.7.1）条款' + '\n';
+                }
+
+            } else if ((Object.keys(json[i])[0] == 'product')) {
+                var product = json[i][Object.keys(json[i])[0]];
+
+            } else if ((Object.keys(json[i])[0] == 'msg')) {
+                var msg = json[i][Object.keys(json[i])[0]];
+                if ((msg.indexOf('电话') < 0) && (msg.indexOf('传真') < 0) && (msg.indexOf('网') < 0) && (msg.indexOf('邮') < 0)) {
+                    coloer = 2
+                    error = error + Object.keys(json[i])[0] + '违反了 GB-7718 2011 （4.1.6.2）条款' + '\n';
                 }
             }
-         }
-         errCode.error = error;
-         errCode.coloer = coloer
-        return  errCode
-     }
+        }
+    }
+    errCode.error = error;
+    errCode.coloer = coloer
+    return errCode
+}
 
 
 function ocr(image, callback) {
