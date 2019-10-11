@@ -299,61 +299,62 @@ function errCode(json) {
     var coloer = 0
     console.log(json, '<<')
     for (var i = 0; i < json.length; i++) {
-        if (Object.keys(json[i])[0]) {
-            if (!json[i][Object.keys(json[i])[0]]) {
-                error = error + Object.keys(json[i])[0] + '识别结果为空' + '\n';
+        var key = Object.keys(json[i])[0];
+        var value = json[i][key]
+        if (key) {
+            if (!json[i][key]) {
+                error = error + key + '识别结果为空' + '\n';
                 coloer = 1
 
-            } else if ((Object.keys(json[i])[0] == 'burden')) {
-                var burden = json[i][Object.keys(json[i])[0]];
-                if ((burden.indexOf('配方表') > -1) || (burden.indexOf('成分') > -1) || (burden.indexOf('主要配料') > -1)) {
+            } else if ((key == 'burden')) {
+
+                if ((value.indexOf('配方表') > -1) || (value.indexOf('成分') > -1) || (value.indexOf('主要配料') > -1)) {
                     coloer = 2
-                    error = error + Object.keys(json[i])[0] + '引导词出错' + '\n';
+                    error = error + key + '引导词出错' + '\n';
                 }
 
-                var warn = ban(burden, burdens);
+                var warn = ban(value, burdens);
                 if (warn) {
                     error = error + warn
                     coloer = 2
                 }
 
-            } else if ((Object.keys(json[i])[0] == 'weight')) {
-
-
-            } else if ((Object.keys(json[i])[0] == 'sc')) {
-                var sc = json[i][Object.keys(json[i])[0]];
-                var num = sc.replace(/[^0-9]/ig, "").toString();
-                var header = num.slice(0,3)
-                if (sc.indexOf('SC') === -1) {
+            } else if (key == 'weight') {
+                if(value.indexOf('l') === -1 && value.indexOf('ml') === -1 && value.indexOf('L') === -1 && value.indexOf('ml') === -1 && value.indexOf('g') === -1 && value.indexOf('kg') === -1){
                     coloer = 2
-                    error = error + Object.keys(json[i])[0] + 'QS/SC标注不正确 违反了 GB-7718 2011 （4.1.9）' + '\n';
+                    error = error + key + '计量单位大小写书写不规范 违反了 GB-7718 2011（4.1.5.2）' + '\n';
+                }
+
+            } else if (key == 'sc') {
+
+                var num = value.replace(/[^0-9]/ig, "").toString();
+                var header = num.slice(0,3)
+                if (value.indexOf('SC') === -1) {
+                    coloer = 2
+                    error = error + key + 'QS/SC标注不正确 违反了 GB-7718 2011 （4.1.9）' + '\n';
                 }else if(num.length != 14 || header < 101 || header > 131){
                     coloer = 2
-                    error = error + Object.keys(json[i])[0] + '生产许可证编号错误或过期 违反了 GB-7718 2011 （4.1.9）' + '\n';
+                    error = error + key + '生产许可证编号错误或过期 违反了 GB-7718 2011 （4.1.9）' + '\n';
                 }
 
-            } else if ((Object.keys(json[i])[0] == 'code')) {
-                var code = json[i][Object.keys(json[i])[0]];
+            } else if (key == 'code') {
 
-                if (code.indexOf('GB/T') === -1) {
+                if (value.indexOf('GB/T') === -1) {
                     coloer = 2
-                    error = error + Object.keys(json[i])[0] + '标准书写错误 违反了 GB-7718 2011 （4.1.10）' + '\n';
+                    error = error + key + '标准书写错误 违反了 GB-7718 2011 （4.1.10）' + '\n';
                 }
-            } else if ((Object.keys(json[i])[0] == 'date')) {
-                var date = json[i][Object.keys(json[i])[0]];
-                if ((date.indexOf('生产日期') < 0) || (date.indexOf('保质期') < 0)) {
+            } else if (key == 'date') {
+                if ((value.indexOf('生产日期') < 0) || (value.indexOf('保质期') < 0)) {
                     coloer = 2
-                    error = error + Object.keys(json[i])[0] + '未标注生产日期或保质期 违反了 GB-7718 2011 （4.1.7.1）' + '\n';
+                    error = error + key + '未标注生产日期或保质期 违反了 GB-7718 2011 （4.1.7.1）' + '\n';
                 }
 
-            } else if ((Object.keys(json[i])[0] == 'product')) {
-                var product = json[i][Object.keys(json[i])[0]];
+            } else if (key == 'product') {
 
-            } else if ((Object.keys(json[i])[0] == 'msg')) {
-                var msg = json[i][Object.keys(json[i])[0]];
-                if ((msg.indexOf('电话') < 0) && (msg.indexOf('传真') < 0) && (msg.indexOf('网') < 0) && (msg.indexOf('邮') < 0)) {
+            } else if (key == 'msg') {
+                if ((value.indexOf('电话') < 0) && (value.indexOf('传真') < 0) && (value.indexOf('网') < 0) && (value.indexOf('邮') < 0)) {
                     coloer = 2
-                    error = error + Object.keys(json[i])[0] + '违反了 GB-7718 2011 （4.1.6.2）' + '\n';
+                    error = error + key + '违反了 GB-7718 2011 （4.1.6.2）' + '\n';
                 }
             }
         }
@@ -362,7 +363,6 @@ function errCode(json) {
     errCode.coloer = coloer
     return errCode
 }
-
 
 function ocr(image, callback) {
     var base64Img = new Buffer(image).toString('base64');
