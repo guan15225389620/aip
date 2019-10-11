@@ -28,8 +28,6 @@ var client = new AipOcr(APP_ID, API_KEY, SECRET_KEY);
 // var image = fs.readFileSync(__dirname + '/51566358844_.pic_hd.jpg');
 
 
-
-
 var burdens = [['burden_ban', '猴头', '肠衣', '豆油', '太阳蛋', '方包片', '球包菜', '组织蛋白', '糖烯', '口服葡萄糖', '活力钙', '调味品', '闽姜', '糕饼专用油', '小香', '香料', '香精', '鲜肉', '碘盐', '酵母提取物', '棕油', '味料', '陈年老汤', 'I+G'
 ],
     ['food_ban', '蟾酥', '藜芦', '颠茄', '雷公藤', '雄黄', '硫磺', '斑蝥', '黄花夹竹桃', '雪上一枝蒿', '铃兰', '铁棒槌', '莽草', '鬼臼', '骆驼蓬', '杠柳皮', '香加皮', '草乌', '砒霜', '红砒', '白砒', '砒石', '牵牛子', '洋金花', '洋地黄', '鱼藤', '青娘虫', '闹羊花', '河豚', '昆明山海棠', '京大戟', '丽江山慈姑', '羊踯躅', '羊角拗', '红粉', '红茴香', '红豆杉', '红升丹', '罂粟壳', '米壳', '朱砂', '夹竹桃', '八角莲', '八里麻', '千金子', '土青木香', '山莨菪', '川乌', '广防己', '马桑叶', '马钱子', '六角莲', '天仙子', '巴豆', '水银', '长春花', '甘遂', '生天南星', '生半夏', '生白附子', '生狼毒', '白降丹', '石蒜', '关木通', '农吉痢'],
@@ -275,10 +273,10 @@ function ban(str, burden) {
     var res = '';
     var warn = '';
 
-    for(var n=0;n<burden.length;n++){
+    for (var n = 0; n < burden.length; n++) {
         var arr = burden[n]
         if (arr[0] == 'add_ban') {
-            warn =  ' 未标示GB 2760中的通用名称,违反GB-7718 2011（4.1.3.1.4）' + '\n'
+            warn = ' 未标示GB 2760中的通用名称,违反GB-7718 2011（4.1.3.1.4）' + '\n'
         } else if (arr[0] == 'food_ban') {
             warn = ' 非食品原料出现在配料表中,违反《食品安全法》第三十八条' + '\n'
         } else if (arr[0] == 'burden_ban') {
@@ -294,14 +292,14 @@ function ban(str, burden) {
     return res
 }
 
-console.log(errCode([{code:'产品标准号:DB-12345612'}]))
+
 
 function errCode(json) {
     var errCode = {}
     var error = ''
     var coloer = 0
+    console.log(json, '<<')
     for (var i = 0; i < json.length; i++) {
-        console.log
         if (Object.keys(json[i])[0]) {
             if (!json[i][Object.keys(json[i])[0]]) {
                 error = error + Object.keys(json[i])[0] + '识别结果为空' + '\n';
@@ -314,9 +312,9 @@ function errCode(json) {
                     error = error + Object.keys(json[i])[0] + '引导词出错' + '\n';
                 }
 
-                var warn = ban(burden,burdens);
-                if(warn){
-                   error = error + warn
+                var warn = ban(burden, burdens);
+                if (warn) {
+                    error = error + warn
                     coloer = 2
                 }
 
@@ -324,17 +322,16 @@ function errCode(json) {
 
 
             } else if ((Object.keys(json[i])[0] == 'sc')) {
-               var sc = json[i][Object.keys(json[i])[0]];
-                if ((sc.indexOf('qs') > -1)) {
+                var sc = json[i][Object.keys(json[i])[0]];
+                if (sc.indexOf('SC') === -1) {
                     coloer = 2
                     error = error + Object.keys(json[i])[0] + 'qs标注不正确 违反了 GB-7718 2011 （4.1.9）条款' + '\n';
                 }
 
             } else if ((Object.keys(json[i])[0] == 'code')) {
-                // DB-' , 'DSS、QB(/T)、GB(/T)、GB/7、GB/(T)、GB/:、13738(.)2
                 var code = json[i][Object.keys(json[i])[0]];
 
-                if ((code.indexOf('DB-') > -1) || (code.indexOf('DSS') > -1) || (code.indexOf('QB/') > -1) || (code.indexOf('GB/') > -1)) {
+                if (code.indexOf('GB/T') === -1) {
                     coloer = 2
                     error = error + Object.keys(json[i])[0] + '标准书写错误 违反了 GB-7718 2011 （4.1.10）条款' + '\n';
                 }
