@@ -70,7 +70,6 @@ function ocrText(str) {
     }
     var s = jsonSort(ocr);
 
-    console.log(s)
     for (g = 0; g < s.length; g++) {
         if (s[g][(Object.keys(s[g])[0])] != str.length && (Object.keys(s[g])[0] != 'birth')) {
 
@@ -97,7 +96,6 @@ function ocrText(str) {
 
 
 function jsonSort(json) {
-    console.log(json)
     for (var j = 1; j < json.length; j++) {
         var temp = json[j],
             val = temp[Object.keys(temp)[0]],
@@ -296,11 +294,14 @@ function ban(str, burden) {
     return res
 }
 
+console.log(errCode([{code:'产品标准号:DB-12345612'}]))
+
 function errCode(json) {
     var errCode = {}
     var error = ''
     var coloer = 0
     for (var i = 0; i < json.length; i++) {
+        console.log
         if (Object.keys(json[i])[0]) {
             if (!json[i][Object.keys(json[i])[0]]) {
                 error = error + Object.keys(json[i])[0] + '识别结果为空' + '\n';
@@ -332,6 +333,7 @@ function errCode(json) {
             } else if ((Object.keys(json[i])[0] == 'code')) {
                 // DB-' , 'DSS、QB(/T)、GB(/T)、GB/7、GB/(T)、GB/:、13738(.)2
                 var code = json[i][Object.keys(json[i])[0]];
+
                 if ((code.indexOf('DB-') > -1) || (code.indexOf('DSS') > -1) || (code.indexOf('QB/') > -1) || (code.indexOf('GB/') > -1)) {
                     coloer = 2
                     error = error + Object.keys(json[i])[0] + '标准书写错误 违反了 GB-7718 2011 （4.1.10）条款' + '\n';
