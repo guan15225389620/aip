@@ -71,7 +71,7 @@ function ocrText(str) {
     }
     var s = jsonSort(ocr);
 
-
+console.log(s)
      for (g = 0; g < s.length; g++) {
         if ( s[g][(Object.keys(s[g])[0])] != str.length && (Object.keys(s[g])[0] != 'birth')) {
 
