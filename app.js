@@ -293,7 +293,6 @@ function ban(str, burden) {
 }
 
 
-
 function errCode(json) {
     var errCode = {}
     var error = ''
@@ -323,9 +322,14 @@ function errCode(json) {
 
             } else if ((Object.keys(json[i])[0] == 'sc')) {
                 var sc = json[i][Object.keys(json[i])[0]];
+                var num = sc.replace(/[^0-9]/ig, "").toString();
+                var header = num.slice(0,3)
                 if (sc.indexOf('SC') === -1) {
                     coloer = 2
-                    error = error + Object.keys(json[i])[0] + 'qs标注不正确 违反了 GB-7718 2011 （4.1.9）条款' + '\n';
+                    error = error + Object.keys(json[i])[0] + 'QS/SC标注不正确 违反了 GB-7718 2011 （4.1.9）' + '\n';
+                }else if(num.length != 14 || header < 101 || header > 131){
+                    coloer = 2
+                    error = error + Object.keys(json[i])[0] + '生产许可证编号错误或过期 违反了 GB-7718 2011 （4.1.9）' + '\n';
                 }
 
             } else if ((Object.keys(json[i])[0] == 'code')) {
@@ -333,13 +337,13 @@ function errCode(json) {
 
                 if (code.indexOf('GB/T') === -1) {
                     coloer = 2
-                    error = error + Object.keys(json[i])[0] + '标准书写错误 违反了 GB-7718 2011 （4.1.10）条款' + '\n';
+                    error = error + Object.keys(json[i])[0] + '标准书写错误 违反了 GB-7718 2011 （4.1.10）' + '\n';
                 }
             } else if ((Object.keys(json[i])[0] == 'date')) {
                 var date = json[i][Object.keys(json[i])[0]];
                 if ((date.indexOf('生产日期') < 0) || (date.indexOf('保质期') < 0)) {
                     coloer = 2
-                    error = error + Object.keys(json[i])[0] + '未标注生产日期或保质期 违反了 GB-7718 2011 （4.1.7.1）条款' + '\n';
+                    error = error + Object.keys(json[i])[0] + '未标注生产日期或保质期 违反了 GB-7718 2011 （4.1.7.1）' + '\n';
                 }
 
             } else if ((Object.keys(json[i])[0] == 'product')) {
@@ -349,7 +353,7 @@ function errCode(json) {
                 var msg = json[i][Object.keys(json[i])[0]];
                 if ((msg.indexOf('电话') < 0) && (msg.indexOf('传真') < 0) && (msg.indexOf('网') < 0) && (msg.indexOf('邮') < 0)) {
                     coloer = 2
-                    error = error + Object.keys(json[i])[0] + '违反了 GB-7718 2011 （4.1.6.2）条款' + '\n';
+                    error = error + Object.keys(json[i])[0] + '违反了 GB-7718 2011 （4.1.6.2）' + '\n';
                 }
             }
         }
