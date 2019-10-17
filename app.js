@@ -154,10 +154,12 @@ app.post('/getOcrText', function (req, res) {
 app.post('/updateOcrText', function (req, res) {
     var tableText = req.body.tableText;
     var chatid = req.body.chatid;
-
-    if (tableText && chatid) {
+    var dataList = req.body.dataList;
+    if (tableText && chatid && dataList) {
         //数据库更新
-        res.json(errCode(tableText))
+
+
+        res.json(errCode(tableText, dataList))
     } else {
         res.send('err')
     }
@@ -191,6 +193,7 @@ app.post("/upload", (req, res) => {
         });
     })
 })
+
 app.post("/login", (req, res) => {
     var code = req.body.code;
     // var code = 'oEFuB4vx3jZioXLU20lUYc2cRmL8'
@@ -293,7 +296,7 @@ function ban(str, burden) {
 }
 
 
-function errCode(json) {
+function errCode(json, dataList) {
     var errCode = {}
     var error = ''
     var coloer = 0
@@ -320,7 +323,7 @@ function errCode(json) {
                 }
 
             } else if (key == 'weight') {
-                if(value.indexOf('l') === -1 && value.indexOf('ml') === -1 && value.indexOf('L') === -1 && value.indexOf('ml') === -1 && value.indexOf('g') === -1 && value.indexOf('kg') === -1){
+                if (value.indexOf('l') === -1 && value.indexOf('ml') === -1 && value.indexOf('L') === -1 && value.indexOf('ml') === -1 && value.indexOf('g') === -1 && value.indexOf('kg') === -1) {
                     coloer = 2
                     error = error + key + '计量单位大小写书写不规范 违反了 GB-7718 2011（4.1.5.2）' + '\n';
                 }
@@ -328,11 +331,11 @@ function errCode(json) {
             } else if (key == 'sc') {
 
                 var num = value.replace(/[^0-9]/ig, "").toString();
-                var header = num.slice(0,3)
+                var header = num.slice(0, 3)
                 if (value.indexOf('SC') === -1) {
                     coloer = 2
                     error = error + key + 'QS/SC标注不正确 违反了 GB-7718 2011 （4.1.9）' + '\n';
-                }else if(num.length != 14 || header < 101 || header > 131){
+                } else if (num.length != 14 || header < 101 || header > 131) {
                     coloer = 2
                     error = error + key + '生产许可证编号错误或过期 违反了 GB-7718 2011 （4.1.9）' + '\n';
                 }
@@ -359,6 +362,45 @@ function errCode(json) {
             }
         }
     }
+
+    var data = Object.keys(dataList)
+    if (data.indexOf('能量') === -1 || data.indexOf('蛋白质') === -1 || data.indexOf('脂肪') === -1 || data.indexOf('碳水化合物') === -1 || data.indexOf('钠') === -1) {
+        error = error + '违反GB28050-2011第4.1条相关规定:所有预包装食品营养标签强制标示：能量、核心营养素的含量及其占营养素参考值（NRV）的百分比，能量和核心营养素' + '\n';
+    }
+
+
+    var list = [['能量'],['蛋白质'],['脂肪'],['饱和脂肪','饱和脂肪酸'],['反式脂肪','反式脂肪酸'],['单不饱和脂肪','单不饱和脂肪酸'],['多不饱和脂肪'],['胆固醇'],['碳水化合物'],['糖','乳糖'],['膳食纤维'],['钠'],['维生素A'],['维生素D'],['维生素E'],['维生素K'],['维生素B1'],['维生素B2'],['维生素B6'],['维生素B12'],['维生素C']['烟酸'],['叶酸'],['泛酸'],['生物素'],['胆碱']['磷'],['钾'],['镁'],['钙'],['铁']['锌'],['碘'],['硒'],['铜'],['氪']['锰']]
+
+
+
+
+    for (var j = 0; j < 5; j++) {
+        var key = Object.keys(dataList)[j]
+        var k = parseInt(dataList[key][0]);
+        var v = parseInt(dataList[key][1]);
+        if(k && y){
+            if (j === 0 && key === '能量') {
+
+            } else if (j === 1 && key === '蛋白质') {
+
+            } else if (j === 2 && key === '脂肪') {
+
+            } else if (j === 3 && key === '碳水化合物') {
+
+            } else if (j === 4 && key === '钠') {
+
+            } else if (key = '') {
+
+            }
+        }else{
+
+
+
+        }
+
+
+    }
+
     errCode.error = error;
     errCode.coloer = coloer
     return errCode
