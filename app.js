@@ -34,7 +34,7 @@ var burdens = [['burden_ban', '猴头', '肠衣', '豆油', '太阳蛋', '方包
     ['add_ban', 'VC钠', '异VC钠', '味素', 'HBA-BN10', '5-呈味核苷酸二钠', 'α-淀粉酶', '笨甲酸钠', '食品添剂', '香精', '红曲米粉', '牛膏']
 ]
 
-
+var f = parseFloat(perServing) / 100;
 function ocrText(str) {
     var arr = {
         'product': ['品名'],
@@ -392,7 +392,6 @@ function errCode(json, dataList, perServing) {
         }
     }
     var a, b, c, d, e, g;
-    var f = parseFloat(perServing) / 100;
     var status = 1
     if (unit(perServing).indexOf('ml')) {
         status = 2;
