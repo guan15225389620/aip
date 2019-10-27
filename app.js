@@ -152,6 +152,7 @@ app.post('/getOcrText', function (req, res) {
 
 
 app.post('/updateOcrText', function (req, res) {
+    console.log(req.body);
     var tableText = req.body.tableText;
     var chatid = req.body.chatid;
     var dataList = req.body.dataList;
