@@ -403,7 +403,7 @@ function errCode(json, dataList, perServing) {
         var key = data[j];
         var k = norm(dataList[key][0]);
         var v = dataList[key][1];
-        if (k && y) {
+        if (k && v) {
             if (key === '能量') {
                 a = parseFloat(k) * f;
                 if (nrv(k, 8400, v)) {
