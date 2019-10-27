@@ -364,7 +364,7 @@ function errCode(json, dataList, perServing) {
 
     var list = [['能量'], ['蛋白质'], ['脂肪'], ['饱和脂肪', '饱和脂肪酸'], ['反式脂肪', '反式脂肪酸'], ['单不饱和脂肪', '单不饱和脂肪酸'], ['多不饱和脂肪'], ['胆固醇'], ['碳水化合物'], ['糖', '乳糖'], ['膳食纤维'], ['钠'], ['维生素A'], ['维生素D'], ['维生素E'], ['维生素K'], ['维生素B1', '硫胺素'], ['维生素B2', '核黄素'], ['维生素B6'], ['维生素B12'], ['维生素C', '抗坏血酸'], ['烟酸', '烟酰胺'], ['叶酸'], ['泛酸'], ['生物素'], ['胆碱'], ['磷'], ['钾'], ['镁'], ['钙'], ['铁'], ['锌'], ['碘'], ['硒'], ['铜'], ['氪'], ['锰']]
     var i = []
-
+    var data =Object.keys(dataList);
     for (var g = 0; g < list.length; g++) {
         var index = data.indexOf(list[g][0])
         if (index > -1) {
@@ -398,8 +398,8 @@ function errCode(json, dataList, perServing) {
     }
 
 
-    for (var j = 0; j < Object.keys(dataList).length; j++) {
-        var key = Object.keys(dataList)[j]
+    for (var j = 0; j <data.length; j++) {
+        var key = data[j];
         var k = norm(dataList[key][0]);
         var v = dataList[key][1];
         if (k && y) {
