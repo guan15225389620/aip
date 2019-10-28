@@ -392,7 +392,8 @@ function errCode(json, dataList, perServing) {
             }
         }
     }
-    var a, b, c, d, e, g;
+    var a, b, c, d, e;
+    var f = parseFloat(perServing) / 100;
     var status = 1
     if (unit(perServing).indexOf('ml')) {
         status = 2;
