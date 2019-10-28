@@ -35,6 +35,7 @@ var burdens = [['burden_ban', '猴头', '肠衣', '豆油', '太阳蛋', '方包
 ]
 
 var f = parseFloat(perServing) / 100;
+
 function ocrText(str) {
     var arr = {
         'product': ['品名'],
@@ -365,7 +366,7 @@ function errCode(json, dataList, perServing) {
 
     var list = [['能量'], ['蛋白质'], ['脂肪'], ['饱和脂肪', '饱和脂肪酸'], ['反式脂肪', '反式脂肪酸'], ['单不饱和脂肪', '单不饱和脂肪酸'], ['多不饱和脂肪'], ['胆固醇'], ['碳水化合物'], ['糖', '乳糖'], ['膳食纤维'], ['钠'], ['维生素A'], ['维生素D'], ['维生素E'], ['维生素K'], ['维生素B1', '硫胺素'], ['维生素B2', '核黄素'], ['维生素B6'], ['维生素B12'], ['维生素C', '抗坏血酸'], ['烟酸', '烟酰胺'], ['叶酸'], ['泛酸'], ['生物素'], ['胆碱'], ['磷'], ['钾'], ['镁'], ['钙'], ['铁'], ['锌'], ['碘'], ['硒'], ['铜'], ['氪'], ['锰']]
     var i = []
-    var data =Object.keys(dataList);
+    var data = Object.keys(dataList);
     for (var g = 0; g < list.length; g++) {
         var index = data.indexOf(list[g][0])
         if (index > -1) {
@@ -398,326 +399,326 @@ function errCode(json, dataList, perServing) {
     }
 
 
-    for (var j = 0; j <data.length; j++) {
+    for (var j = 0; j < data.length; j++) {
         var key = data[j];
         var k = norm(dataList[key][0]);
         var v = dataList[key][1];
         if (k && v) {
             if (key === '能量') {
                 a = parseFloat(k) * f;
-                if (nrv(k, 8400, v)) {
+                if (nrv(k, 8400, v, f)) {
                     error = error + key + '' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 0 || unit(k).indexOf('kJ') === -1 || threshold(k, v, 17)) {
+                if (digits(k) != 0 || unit(k).indexOf('kJ') === -1 || threshold(k, v, f, 17)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '蛋白质') {
                 b = parseFloat(k) * f;
-                if (nrv(k, 60, v)) {
+                if (nrv(k, 60, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, 0.5)) {
+                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, f, 0.5)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '脂肪') {
                 c = parseFloat(k) * f;
-                if (nrv(k, 60, v)) {
+                if (nrv(k, 60, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, 0.5)) {
+                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, f, 0.5)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '碳水化合物') {
                 d = parseFloat(k) * f;
-                if (nrv(k, 300, v)) {
+                if (nrv(k, 300, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, 0.5)) {
+                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, f, 0.5)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '饱和脂肪' || key === '饱和脂肪酸') {
-                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, 0.1)) {
+                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, f, 0.1)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '反式脂肪' || key === '反式脂肪酸') {
-                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, 0.3)) {
+                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, f, 0.3)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '多不饱和脂肪' || key === '多不饱和脂肪酸') {
-                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, 0.1)) {
+                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, f, 0.1)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '胆固醇') {
-                if (nrv(k, 300, v)) {
+                if (nrv(k, 300, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 5)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, 5)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '单不饱和脂肪' || key === '单不饱和脂肪酸') {
-                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, 0.1)) {
+                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, f, 0.1)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '糖' || key === '乳糖') {
-                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, 0.5)) {
+                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, f, 0.5)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '膳食纤维') {
-                if (nrv(k, 25, v)) {
+                if (nrv(k, 25, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, 0.5)) {
+                if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, f, 0.5)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '钠') {
                 e = parseFloat(k) * f;
-                if (nrv(k, 2000, v)) {
+                if (nrv(k, 2000, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 5)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, 5)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '维生素A') {
-                if (nrv(k, 800, v)) {
+                if (nrv(k, 800, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('ug RE') === -1 || threshold(k, v, 8)) {
+                if (digits(k) != 1 || unit(k).indexOf('ug RE') === -1 || threshold(k, v, f, 8)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '维生素D') {
-                if (nrv(k, 5, v)) {
+                if (nrv(k, 5, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('ug') === -1 || threshold(k, v, 0.1)) {
+                if (digits(k) != 1 || unit(k).indexOf('ug') === -1 || threshold(k, v, f, 0.1)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '维生素E') {
-                if (nrv(k, 14, v)) {
+                if (nrv(k, 14, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg a-TE') === -1 || threshold(k, v, 0.28)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg a-TE') === -1 || threshold(k, v, f, 0.28)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '维生素K') {
-                if (nrv(k, 80, v)) {
+                if (nrv(k, 80, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('ug') === -1 || threshold(k, v, 1.6)) {
+                if (digits(k) != 1 || unit(k).indexOf('ug') === -1 || threshold(k, v, f, 1.6)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '维生素B1' || key === '硫胺素') {
-                if (nrv(k, 1.4, v)) {
+                if (nrv(k, 1.4, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 0.03)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, 0.03)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '维生素B2' || key === '核黄素') {
-                if (nrv(k, 1.4, v)) {
+                if (nrv(k, 1.4, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 0.03)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, 0.03)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '维生素C' || key === '抗坏血酸') {
-                if (nrv(k, 100, v)) {
+                if (nrv(k, 100, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 2)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, 2)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '维生素B6') {
-                if (nrv(k, 1.4, v)) {
+                if (nrv(k, 1.4, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 0.03)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, 0.03)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '维生素B12') {
-                if (nrv(k, 8400, v)) {
+                if (nrv(k, 8400, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('ug') === -1 || threshold(k, v, 0.05)) {
+                if (digits(k) != 1 || unit(k).indexOf('ug') === -1 || threshold(k, v, f, 0.05)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '烟酸' || key === '烟酰胺') {
-                if (nrv(k, 8400, v)) {
+                if (nrv(k, 8400, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 0.28)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, 0.28)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '叶酸') {
-                if (nrv(k, 400, v)) {
+                if (nrv(k, 400, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || (unit(k).indexOf('ug DFE') === -1 || unit(k).indexOf('ug') === -1 || threshold(k, v, 8))) {
+                if (digits(k) != 1 || (unit(k).indexOf('ug DFE') === -1 || unit(k).indexOf('ug') === -1 || threshold(k, v, f, 8))) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '泛酸') {
-                if (nrv(k, 5, v)) {
+                if (nrv(k, 5, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 0.1)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, 0.1)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '生物素') {
-                if (nrv(k, 30, v)) {
+                if (nrv(k, 30, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('ug') === -1 || threshold(k, v, 0.6)) {
+                if (digits(k) != 1 || unit(k).indexOf('ug') === -1 || threshold(k, v, f, 0.6)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '胆碱') {
-                if (nrv(k, 450, v)) {
+                if (nrv(k, 450, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 9)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, 9)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '磷') {
-                if (nrv(k, 700, v)) {
+                if (nrv(k, 700, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 14)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, 14)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '钾') {
-                if (nrv(k, 2000, v)) {
+                if (nrv(k, 2000, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 20)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, 20)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '镁') {
-                if (nrv(k, 300, v)) {
+                if (nrv(k, 300, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 6)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, 6)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '钙') {
-                if (nrv(k, 800, v)) {
+                if (nrv(k, 800, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 8)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, 8)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '铁') {
-                if (nrv(k, 15, v)) {
+                if (nrv(k, 15, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 0.3)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, 0.3)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '锌') {
-                if (nrv(k, 15, v)) {
+                if (nrv(k, 15, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 0.3)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, 0.3)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '碘') {
-                if (nrv(k, 150, v)) {
+                if (nrv(k, 150, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('ug') === -1 || threshold(k, v, 3)) {
+                if (digits(k) != 1 || unit(k).indexOf('ug') === -1 || threshold(k, v, f, 3)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '硒') {
-                if (nrv(k, 50, v)) {
+                if (nrv(k, 50, v, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('ug') === -1 || threshold(k, v, 1)) {
+                if (digits(k) != 1 || unit(k).indexOf('ug') === -1 || threshold(k, v, f, 1)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '铜') {
-                if (nrv(k, 1.5, v)) {
+                if (nrv(k, 1.5, v, f, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 0.03)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, f, 0.03)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '氪') {
-                if (nrv(k, 1, v)) {
+                if (nrv(k, 1, v, f, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 0.02)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, f, 0.02)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
             } else if (key === '锰') {
-                if (nrv(k, 3, v)) {
+                if (nrv(k, 3, v, f, f)) {
                     error = error + key + '营养素参考值％（NRV％）数值错误' + '\n';
                     coloer = 2
                 }
-                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, 0.06)) {
+                if (digits(k) != 1 || unit(k).indexOf('mg') === -1 || threshold(k, v, f, f, 0.06)) {
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
                 }
@@ -916,7 +917,7 @@ function unit(s) {
     return s
 }
 
-function threshold(a, c, b) {
+function threshold(a, c, f, b) {
     var a = parseFloat(a) * f;
     var b = parseFloat(b);
     var c = parseFloat(c);
@@ -935,7 +936,7 @@ function threshold(a, c, b) {
 }
 
 //判断nrv
-function nrv(a, b, c) {
+function nrv(a, b, c, f) {
     var a = parseFloat(a) * f;
     var b = parseFloat(b);
     var c = parseFloat(c);
