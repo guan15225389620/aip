@@ -752,6 +752,7 @@ function errCode(json, dataList, perServing) {
             coloer = 2
         }
     }
+	console.log(a,b,c,d,e,'abcde')
     if (a && b && c && d && e) {
         if (a < 0.9 * (b * 17 + c * 37 + d * 17) || a > 1.1 * (b * 17 + c * 37 + d * 17)) {
             error = error + '量数值标示错误' + '\n';
