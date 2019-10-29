@@ -35,16 +35,22 @@ var burdens = [['burden_ban', '猴头', '肠衣', '豆油', '太阳蛋', '方包
 ]
 
 
-
 function ocrText(str) {
     var arr = {
-        'product': ['品名'],
+        'product': ['食品名称','产品名称','名称','品名'],
         'burden': ['配料', '原料', '配方表', '成分', '主要配料'],
         'weight': ['净含量'],
-        'code': ['产品标准代号', '产品标准'],
-        'msg': ['产地', '联系方式', '地址', '生产商', '生产者', '联系方式', '电话', '传真', '经销商', '经销者', '网址', '网站', '邮政', '邮件'],
-        'date': ['生产日期', '保质期', '时间'],
-        'storage': ['贮存条件'],
+        'code': ['产品标准代号', '产品标准', '标准代号'],
+        'msg': ['经销商', '经销者',],
+        'manufacturer': ['生产商', '生产者','制造商','制造者','制造'],
+        'address': ['地址'],
+        'place': ['产地'],
+        'tel': ['联系方式', '联系方式', '电话', '传真',],
+        'web': ['网址', '网站'],
+        'date': ['保质期', '时间'],
+        'office': ['邮政', '邮件' ,'E-mail'],
+        'day': ['生产日期'],
+        'storage': ['贮存条件','保存方法','贮存','保存'],
         'sc': ['生产许可证编号', 'sc', '食证字', '生产许可', 'qs'],
         'birth': ['营养成分表']
     }
@@ -68,7 +74,8 @@ function ocrText(str) {
         ocr.push(item)
     }
     var s = jsonSort(ocr);
-
+    var strs = '';
+    var i = 0;
     for (g = 0; g < s.length; g++) {
         if (s[g][(Object.keys(s[g])[0])] != str.length && (Object.keys(s[g])[0] != 'birth')) {
 
@@ -81,15 +88,23 @@ function ocrText(str) {
 
         }
     }
-
     for (g = 0; g < s.length; g++) {
         if ((Object.keys(s[g])[0] === 'birth')) {
-            s.splice(g, 1)
-
+            s.splice(g--, 1)
+        } else if (Object.keys(s[g])[0] === 'msg' || Object.keys(s[g])[0] === 'manufacturer' || Object.keys(s[g])[0] === 'address' || Object.keys(s[g])[0] === 'place' || Object.keys(s[g])[0] === 'tel' || Object.keys(s[g])[0] === 'web'|| Object.keys(s[g])[0] === 'office') {
+            if(s[g][Object.keys(s[g])[0]]){
+                strs = strs + s[g][Object.keys(s[g])[0]]
+            }
+            if(Object.keys(s[g])[0] === 'msg'){
+                i = g
+            }else {
+                s.splice(g--, 1)
+            }
+            if(i){
+                s[i].msg = strs
+            }
         }
     }
-
-
     return s
 }
 
@@ -313,7 +328,7 @@ function errCode(json, dataList, perServing) {
 
                 if ((value.indexOf('配方表') > -1) || (value.indexOf('成分') > -1) || (value.indexOf('主要配料') > -1)) {
                     coloer = 2
-                    error = error + key + '引导词出错' + '\n';
+                    error = error + '根据GB7718-2011第4.1.3.1.1条相关规定：配料表应以“配料”或“配料表”为引导词。' + '\n';
                 }
 
                 var warn = ban(value, burdens);
@@ -349,7 +364,7 @@ function errCode(json, dataList, perServing) {
             } else if (key == 'date') {
                 if ((value.indexOf('生产日期') < 0) || (value.indexOf('保质期') < 0)) {
                     coloer = 2
-                    error = error + key + '此类用语违反GB7718-2011第3.3条相关规定：应通俗易懂、有科学依据，不得标示封建迷信、色情、贬低其他食品或违背营养科学常识的内容。' + '\n';
+                    error = error + key + '未检测到“关键字”项相关内容，不符合GB7718-2011第4.1.1条相关规定：直接向消费者提供的预包装食品标签标示应包括“关键字”。' + '\n';
                 }
 
             } else if (key == 'product') {
@@ -402,6 +417,13 @@ function errCode(json, dataList, perServing) {
 
     for (var j = 0; j < data.length; j++) {
         var key = data[j];
+
+
+        if (!dataList[key][0] && !dataList[key][1]) {
+            error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
+            coloer = 2
+
+        }
         var k = norm(dataList[key][0]);
         var v = dataList[key][1];
         if (k && v) {
