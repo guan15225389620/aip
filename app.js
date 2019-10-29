@@ -454,6 +454,7 @@ function errCode(json, dataList, perServing) {
                     coloer = 2
                 }
                 if (digits(k) != 1 || unit(k).indexOf('g') === -1 || threshold(k, v, f, 0.5)) {
+			console.log(k,dataList[key])
                     console.log(digits(k) , unit(k).indexOf('g') , threshold(k, v, f, 0.5))
                     error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                     coloer = 2
