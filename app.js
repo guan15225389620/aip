@@ -753,7 +753,7 @@ function errCode(json, dataList, perServing) {
         }
     }
 	console.log(a,b,c,d,e,'abcde')
-    if (a && b && c && d && e) {
+    if (a !='undefind' && b !='undefind' && c  !='undefind'&& d !='undefind' && e !='undefind') {
         if (a < 0.9 * (b * 17 + c * 37 + d * 17) || a > 1.1 * (b * 17 + c * 37 + d * 17)) {
             error = error + '量数值标示错误' + '\n';
             coloer = 2
