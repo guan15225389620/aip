@@ -757,9 +757,6 @@ function errCode(json, dataList, perServing) {
             error = error + '量数值标示错误' + '\n';
             coloer = 2
 
-        } else {
-            error = error + '违反GB28050-2011第4.1条相关规定:所有预包装食品营养标签强制标示：能量、核心营养素的含量及其占营养素参考值（NRV）的百分比，能量和核心营养素' + '\n';
-            coloer = 2
         }
         if ((c * 37) <= (0.5 * a)) {
             if (a <= 17) {
