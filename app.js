@@ -362,7 +362,7 @@ function errCode(json, dataList, perServing) {
                     error = error + key + '根据GB7718-2011《食品安全国家标准 预包装食品标签通则》第4.1.10条相关规定：在国内生产并在国内销售的预包装食品（不包括进口预包装食品）应标示产品所执行的标准代号和顺序号。' + '\n';
                 }
             } else if (key == 'date') {
-                if ((value.indexOf('生产日期') < 0) || (value.indexOf('保质期') < 0)) {
+                if ( value.indexOf('保质期') < 0) {
                     coloer = 2
                     error = error + key + '未检测到“关键字”项相关内容，不符合GB7718-2011第4.1.1条相关规定：直接向消费者提供的预包装食品标签标示应包括“关键字”。' + '\n';
                 }
