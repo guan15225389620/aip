@@ -962,7 +962,7 @@ function threshold(a, c, f, b) {
 //判断nrv
 function nrv(a, b, c, f) {
     var a = parseFloat(a) * f;
-    var b = parseFloat(b);
+    var b = parseFloat(b) / 100;
     var c = parseFloat(c);
     var tmp = a / b;
 
