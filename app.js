@@ -37,20 +37,20 @@ var burdens = [['burden_ban', '猴头', '肠衣', '豆油', '太阳蛋', '方包
 
 function ocrText(str) {
     var arr = {
-        'product': ['食品名称','产品名称','名称','品名'],
+        'product': ['食品名称', '产品名称', '名称', '品名'],
         'burden': ['配料', '原料', '配方表', '成分', '主要配料'],
         'weight': ['净含量'],
         'code': ['产品标准代号', '产品标准', '标准代号'],
         'msg': ['经销商', '经销者',],
-        'manufacturer': ['生产商', '生产者','制造商','制造者','制造'],
+        'manufacturer': ['生产商', '生产者', '制造商', '制造者', '制造'],
         'address': ['地址'],
         'place': ['产地'],
         'tel': ['联系方式', '联系方式', '电话', '传真',],
         'web': ['网址', '网站'],
         'date': ['保质期', '时间'],
-        'office': ['邮政', '邮件' ,'E-mail'],
+        'office': ['邮政', '邮件', 'E-mail'],
         'day': ['生产日期'],
-        'storage': ['贮存条件','保存方法','贮存','保存'],
+        'storage': ['贮存条件', '保存方法', '贮存', '保存'],
         'sc': ['生产许可证编号', 'sc', '食证字', '生产许可', 'qs'],
         'birth': ['营养成分表']
     }
@@ -91,16 +91,16 @@ function ocrText(str) {
     for (g = 0; g < s.length; g++) {
         if ((Object.keys(s[g])[0] === 'birth')) {
             s.splice(g--, 1)
-        } else if (Object.keys(s[g])[0] === 'msg' || Object.keys(s[g])[0] === 'manufacturer' || Object.keys(s[g])[0] === 'address' || Object.keys(s[g])[0] === 'place' || Object.keys(s[g])[0] === 'tel' || Object.keys(s[g])[0] === 'web'|| Object.keys(s[g])[0] === 'office') {
-            if(s[g][Object.keys(s[g])[0]]){
+        } else if (Object.keys(s[g])[0] === 'msg' || Object.keys(s[g])[0] === 'manufacturer' || Object.keys(s[g])[0] === 'address' || Object.keys(s[g])[0] === 'place' || Object.keys(s[g])[0] === 'tel' || Object.keys(s[g])[0] === 'web' || Object.keys(s[g])[0] === 'office') {
+            if (s[g][Object.keys(s[g])[0]]) {
                 strs = strs + s[g][Object.keys(s[g])[0]]
             }
-            if(Object.keys(s[g])[0] === 'msg'){
+            if (Object.keys(s[g])[0] === 'msg') {
                 i = g
-            }else {
+            } else {
                 s.splice(g--, 1)
             }
-            if(i){
+            if (i) {
                 s[i].msg = strs
             }
         }
@@ -320,7 +320,7 @@ function errCode(json, dataList, perServing) {
         var key = Object.keys(json[i])[0];
         var value = json[i][key]
         if (key) {
-            if (!json[i][key]) {
+            if (json[i][key] === 'undefined') {
                 error = error + key + '识别结果为空' + '\n';
                 coloer = 1
 
@@ -362,7 +362,7 @@ function errCode(json, dataList, perServing) {
                     error = error + key + '根据GB7718-2011《食品安全国家标准 预包装食品标签通则》第4.1.10条相关规定：在国内生产并在国内销售的预包装食品（不包括进口预包装食品）应标示产品所执行的标准代号和顺序号。' + '\n';
                 }
             } else if (key == 'date') {
-                if ( value.indexOf('保质期') < 0) {
+                if (value.indexOf('保质期') < 0) {
                     coloer = 2
                     error = error + key + '未检测到“关键字”项相关内容，不符合GB7718-2011第4.1.1条相关规定：直接向消费者提供的预包装食品标签标示应包括“关键字”。' + '\n';
                 }
@@ -419,7 +419,7 @@ function errCode(json, dataList, perServing) {
         var key = data[j];
 
 
-        if (!dataList[key][0] && !dataList[key][1]) {
+        if (dataList[key][0] === 'undefined' && dataList[key][1] === 'undefined') {
             error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
             coloer = 2
 
@@ -752,8 +752,8 @@ function errCode(json, dataList, perServing) {
             coloer = 2
         }
     }
-	console.log(a,b,c,d,e,'abcde')
-    if (a !='undefined' && b !='undefined' && c  !='undefined'&& d !='undefined' && e !='undefined') {
+    console.log(a, b, c, d, e, 'abcde')
+    if (a != 'undefined' && b != 'undefined' && c != 'undefined' && d != 'undefined' && e != 'undefined') {
         if (a < 0.9 * (b * 17 + c * 37 + d * 17) || a > 1.1 * (b * 17 + c * 37 + d * 17)) {
             error = error + '量数值标示错误' + '\n';
             coloer = 2
@@ -807,10 +807,10 @@ function errCode(json, dataList, perServing) {
             error = error + '含量声称方式可以使用低钠' + '\n';
             coloer = 2
         }
-    } else{
-		 error = error + '提示：违反GB28050-2011第4.1条相关规定（所有预包装食品营养标签强制标示：能量、核心营养素的含量及其占营养素参考值（NRV）的百分比，能量和核心营养素有别于其他营养素）' + '\n';
-            coloer = 2
-	}
+    } else {
+        error = error + '提示：违反GB28050-2011第4.1条相关规定（所有预包装食品营养标签强制标示：能量、核心营养素的含量及其占营养素参考值（NRV）的百分比，能量和核心营养素有别于其他营养素）' + '\n';
+        coloer = 2
+    }
     errCode.error = error;
     errCode.coloer = coloer
     return errCode
