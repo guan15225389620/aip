@@ -89,7 +89,7 @@ function ocrText(str) {
         }
     }
     for (g = 0; g < s.length; g++) {
-        if ((Object.keys(s[g])[0] === 'birth')) {
+        if ((Object.keys(s[g])[0] === 'birth') || (Object.keys(s[g])[0] === 'day')) {
             s.splice(g--, 1)
         } else if (Object.keys(s[g])[0] === 'msg' || Object.keys(s[g])[0] === 'manufacturer' || Object.keys(s[g])[0] === 'address' || Object.keys(s[g])[0] === 'place' || Object.keys(s[g])[0] === 'tel' || Object.keys(s[g])[0] === 'web' || Object.keys(s[g])[0] === 'office') {
             if (s[g][Object.keys(s[g])[0]]) {
@@ -173,7 +173,8 @@ app.post('/updateOcrText', function (req, res) {
     var chatid = req.body.chatid;
     var dataList = req.body.dataList;
     var perServing = req.body.perServing;
-    if (tableText && chatid && dataList && perServing) {
+    var date = req.body.date
+    if (tableText && chatid && dataList && perServing && date) {
         //数据库更新
         res.json(errCode(tableText, dataList, perServing))
     } else {
@@ -312,7 +313,7 @@ function ban(str, burden) {
 }
 
 
-function errCode(json, dataList, perServing) {
+function errCode(json, dataList, perServing ,date) {
     var errCode = {}
     var error = ''
     var coloer = 0
@@ -960,8 +961,8 @@ function threshold(a, c, f, b) {
 }
 
 //判断nrv
-function nrv(a, b, c, f) {
-    var a = parseFloat(a) * f;
+function nrv(a, b, c) {
+    var a = parseFloat(a) ;
     var b = parseFloat(b) / 100;
     var c = parseFloat(c);
     var tmp = a / b;
