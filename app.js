@@ -34,6 +34,52 @@ var burdens = [['burden_ban', '猴头', '肠衣', '豆油', '太阳蛋', '方包
     ['add_ban', 'VC钠', '异VC钠', '味素', 'HBA-BN10', '5-呈味核苷酸二钠', 'α-淀粉酶', '笨甲酸钠', '食品添剂', '香精', '红曲米粉', '牛膏']
 ]
 
+function ocr(image, callback) {
+    var base64Img = new Buffer(image).toString('base64');
+    client.generalBasic(base64Img).then(function (result) {
+        var model = {}
+        var rt = result.words_result
+
+        if (result.error_code) {
+            callback('err')
+        } else {
+            rt.forEach(function (e, i) {
+                if (product.test(e.words)) {
+                    model.product = e
+                } else if (burden.test(e.words)) {
+                    model.burden = e
+                } else if (code.test(e.words)) {
+                    model.code = e
+                } else if (sc.test(e.words)) {
+                    model.badwordreg = e
+                } else if (pd_date.test(e.words)) {
+                    model.pd_date = e
+                } else if (EXP.test(e.words)) {
+                    model.EXP = e
+                } else if (place.test(e.words)) {
+                    model.place = e
+                } else if (tel.test(e.words)) {
+                    model.tel = e
+                } else if (wt_net.test(e.words)) {
+                    model.wt_net = e
+                } else if (address.test(e.words)) {
+                    model.address = e
+                } else if (energy.test(e.words) || protein.test(e.words) || fat.test(e.words) || na.test(e.words) || cbd.test(e.words)) {
+
+                    console.log(e, i)
+                    console.log(rt[i + 1])
+                    // model.nutrition = e
+                }
+            })
+            callback(model)
+        }
+
+    }).catch(function (err) {
+        // 如果发生网络错误
+        callback('err')
+        console.log(err, 'timeout');
+    });
+}
 
 function ocrText(str) {
     var arr = {
