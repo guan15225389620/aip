@@ -174,7 +174,7 @@ app.post('/updateOcrText', function (req, res) {
     var dataList = req.body.dataList;
     var perServing = req.body.perServing;
     var date = req.body.date
-    if (tableText && chatid && dataList && perServing && date) {
+    if ( chatid && (tableText || (dataList && perServing)) && date) {
         //数据库更新
         res.json(errCode(tableText, dataList, perServing))
     } else {
