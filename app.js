@@ -317,69 +317,72 @@ function errCode(json, dataList, perServing ,date) {
     var errCode = {}
     var error = ''
     var coloer = 0
-    for (var i = 0; i < json.length; i++) {
-        var key = Object.keys(json[i])[0];
-        var value = json[i][key]
-        if (key) {
-            if (json[i][key] === 'undefined') {
-                error = error + key + '识别结果为空' + '\n';
-                coloer = 1
-
-            } else if ((key == 'burden')) {
-
-                if ((value.indexOf('配方表') > -1) || (value.indexOf('成分') > -1) || (value.indexOf('主要配料') > -1)) {
-                    coloer = 2
-                    error = error + '根据GB7718-2011第4.1.3.1.1条相关规定：配料表应以“配料”或“配料表”为引导词。' + '\n';
-                }
-
-                var warn = ban(value, burdens);
-                if (warn) {
-                    error = error + warn
-                    coloer = 2
-                }
-
-            } else if (key == 'weight') {
-                if (value.indexOf('l') === -1 && value.indexOf('ml') === -1 && value.indexOf('L') === -1 && value.indexOf('ml') === -1 && value.indexOf('g') === -1 && value.indexOf('kg') === -1) {
-                    coloer = 2
-                    error = error + key + '根据GB7718-2011《食品安全国家标准 预包装食品标签通则》第4.1.5.2条相关规定：应依据法定计量单位，按以下形式标示包装物（容器）中食品的净含量：(a)液态食品，用体积升(L) (l)、毫升(mL) (ml)，或用质量克(g)、千克(kg)；(b)固态食品，用质量克(g)、千克(kg)；(c)半固态或黏性食品，用质量克(g)、千克(kg)或体积升(L) (l)、毫升(mL) (ml)。' + '\n';
-                }
-
-            } else if (key == 'sc') {
-
-                var num = value.replace(/[^0-9]/ig, "").toString();
-                var header = num.slice(0, 3)
-                if (value.indexOf('SC') === -1) {
-                    coloer = 2
-                    error = error + key + '根据GB7718-2011《食品安全国家标准 预包装食品标签通则》第4.1.9条相关规定：预包装食品标签应标示食品生产许可证编号的，标示形式按照相关规定执行' + '\n';
-                } else if (num.length != 14 || header < 101 || header > 131) {
-                    coloer = 2
-                    error = error + key + '根据GB7718-2011《食品安全国家标准 预包装食品标签通则》第4.1.9条相关规定：预包装食品标签应标示食品生产许可证编号的，标示形式按照相关规定执行' + '\n';
-                }
-
-            } else if (key == 'code') {
-
-                if (value.indexOf('GB/T') === -1) {
-                    coloer = 2
-                    error = error + key + '根据GB7718-2011《食品安全国家标准 预包装食品标签通则》第4.1.10条相关规定：在国内生产并在国内销售的预包装食品（不包括进口预包装食品）应标示产品所执行的标准代号和顺序号。' + '\n';
-                }
-            } else if (key == 'date') {
-                if (value.indexOf('保质期') < 0) {
-                    coloer = 2
-                    error = error + key + '未检测到“关键字”项相关内容，不符合GB7718-2011第4.1.1条相关规定：直接向消费者提供的预包装食品标签标示应包括“关键字”。' + '\n';
-                }
-
-            } else if (key == 'product') {
-
-            } else if (key == 'msg') {
-                if ((value.indexOf('电话') < 0) && (value.indexOf('传真') < 0) && (value.indexOf('网') < 0) && (value.indexOf('邮') < 0)) {
-                    coloer = 2
-                    error = error + key + '根据GB7718-2011《食品安全国家标准 预包装食品标签通则》第4.1.6.1条相关规定：应当标注生产者的名称、地址和联系方式。生产者名称和地址应当是依法登记注册、能够承担产品安全质量责任的生产者的名称、地址。' + '\n';
+    if(json){
+        for (var i = 0; i < json.length; i++) {
+            var key = Object.keys(json[i])[0];
+            var value = json[i][key]
+            if (key) {
+                if (json[i][key] === 'undefined') {
+                    error = error + key + '识别结果为空' + '\n';
+                    coloer = 1
+    
+                } else if ((key == 'burden')) {
+    
+                    if ((value.indexOf('配方表') > -1) || (value.indexOf('成分') > -1) || (value.indexOf('主要配料') > -1)) {
+                        coloer = 2
+                        error = error + '根据GB7718-2011第4.1.3.1.1条相关规定：配料表应以“配料”或“配料表”为引导词。' + '\n';
+                    }
+    
+                    var warn = ban(value, burdens);
+                    if (warn) {
+                        error = error + warn
+                        coloer = 2
+                    }
+    
+                } else if (key == 'weight') {
+                    if (value.indexOf('l') === -1 && value.indexOf('ml') === -1 && value.indexOf('L') === -1 && value.indexOf('ml') === -1 && value.indexOf('g') === -1 && value.indexOf('kg') === -1) {
+                        coloer = 2
+                        error = error + key + '根据GB7718-2011《食品安全国家标准 预包装食品标签通则》第4.1.5.2条相关规定：应依据法定计量单位，按以下形式标示包装物（容器）中食品的净含量：(a)液态食品，用体积升(L) (l)、毫升(mL) (ml)，或用质量克(g)、千克(kg)；(b)固态食品，用质量克(g)、千克(kg)；(c)半固态或黏性食品，用质量克(g)、千克(kg)或体积升(L) (l)、毫升(mL) (ml)。' + '\n';
+                    }
+    
+                } else if (key == 'sc') {
+    
+                    var num = value.replace(/[^0-9]/ig, "").toString();
+                    var header = num.slice(0, 3)
+                    if (value.indexOf('SC') === -1) {
+                        coloer = 2
+                        error = error + key + '根据GB7718-2011《食品安全国家标准 预包装食品标签通则》第4.1.9条相关规定：预包装食品标签应标示食品生产许可证编号的，标示形式按照相关规定执行' + '\n';
+                    } else if (num.length != 14 || header < 101 || header > 131) {
+                        coloer = 2
+                        error = error + key + '根据GB7718-2011《食品安全国家标准 预包装食品标签通则》第4.1.9条相关规定：预包装食品标签应标示食品生产许可证编号的，标示形式按照相关规定执行' + '\n';
+                    }
+    
+                } else if (key == 'code') {
+    
+                    if (value.indexOf('GB/T') === -1) {
+                        coloer = 2
+                        error = error + key + '根据GB7718-2011《食品安全国家标准 预包装食品标签通则》第4.1.10条相关规定：在国内生产并在国内销售的预包装食品（不包括进口预包装食品）应标示产品所执行的标准代号和顺序号。' + '\n';
+                    }
+                } else if (key == 'date') {
+                    if (value.indexOf('保质期') < 0) {
+                        coloer = 2
+                        error = error + key + '未检测到“关键字”项相关内容，不符合GB7718-2011第4.1.1条相关规定：直接向消费者提供的预包装食品标签标示应包括“关键字”。' + '\n';
+                    }
+    
+                } else if (key == 'product') {
+    
+                } else if (key == 'msg') {
+                    if ((value.indexOf('电话') < 0) && (value.indexOf('传真') < 0) && (value.indexOf('网') < 0) && (value.indexOf('邮') < 0)) {
+                        coloer = 2
+                        error = error + key + '根据GB7718-2011《食品安全国家标准 预包装食品标签通则》第4.1.6.1条相关规定：应当标注生产者的名称、地址和联系方式。生产者名称和地址应当是依法登记注册、能够承担产品安全质量责任的生产者的名称、地址。' + '\n';
+                    }
                 }
             }
         }
     }
+   
 
-
+if(dataList){
     var list = [['能量'], ['蛋白质'], ['脂肪'], ['饱和脂肪', '饱和脂肪酸'], ['反式脂肪', '反式脂肪酸'], ['单不饱和脂肪', '单不饱和脂肪酸'], ['多不饱和脂肪'], ['胆固醇'], ['碳水化合物'], ['糖', '乳糖'], ['膳食纤维'], ['钠'], ['维生素A'], ['维生素D'], ['维生素E'], ['维生素K'], ['维生素B1', '硫胺素'], ['维生素B2', '核黄素'], ['维生素B6'], ['维生素B12'], ['维生素C', '抗坏血酸'], ['烟酸', '烟酰胺'], ['叶酸'], ['泛酸'], ['生物素'], ['胆碱'], ['磷'], ['钾'], ['镁'], ['钙'], ['铁'], ['锌'], ['碘'], ['硒'], ['铜'], ['氪'], ['锰']]
     var i = []
     var data = Object.keys(dataList);
@@ -753,7 +756,7 @@ function errCode(json, dataList, perServing ,date) {
             coloer = 2
         }
     }
-    console.log(a, b, c, d, e, 'abcde')
+   
     if (a != 'undefined' && b != 'undefined' && c != 'undefined' && d != 'undefined' && e != 'undefined') {
         if (a < 0.9 * (b * 17 + c * 37 + d * 17) || a > 1.1 * (b * 17 + c * 37 + d * 17)) {
             error = error + '量数值标示错误' + '\n';
@@ -812,56 +815,10 @@ function errCode(json, dataList, perServing ,date) {
         error = error + '提示：违反GB28050-2011第4.1条相关规定（所有预包装食品营养标签强制标示：能量、核心营养素的含量及其占营养素参考值（NRV）的百分比，能量和核心营养素有别于其他营养素）' + '\n';
         coloer = 2
     }
+}
     errCode.error = error;
     errCode.coloer = coloer
     return errCode
-}
-
-function ocr(image, callback) {
-    var base64Img = new Buffer(image).toString('base64');
-    client.generalBasic(base64Img).then(function (result) {
-        var model = {}
-        var rt = result.words_result
-
-        if (result.error_code) {
-            callback('err')
-        } else {
-            rt.forEach(function (e, i) {
-                if (product.test(e.words)) {
-                    model.product = e
-                } else if (burden.test(e.words)) {
-                    model.burden = e
-                } else if (code.test(e.words)) {
-                    model.code = e
-                } else if (sc.test(e.words)) {
-                    model.badwordreg = e
-                } else if (pd_date.test(e.words)) {
-                    model.pd_date = e
-                } else if (EXP.test(e.words)) {
-                    model.EXP = e
-                } else if (place.test(e.words)) {
-                    model.place = e
-                } else if (tel.test(e.words)) {
-                    model.tel = e
-                } else if (wt_net.test(e.words)) {
-                    model.wt_net = e
-                } else if (address.test(e.words)) {
-                    model.address = e
-                } else if (energy.test(e.words) || protein.test(e.words) || fat.test(e.words) || na.test(e.words) || cbd.test(e.words)) {
-
-                    console.log(e, i)
-                    console.log(rt[i + 1])
-                    // model.nutrition = e
-                }
-            })
-            callback(model)
-        }
-
-    }).catch(function (err) {
-        // 如果发生网络错误
-        callback('err')
-        console.log(err, 'timeout');
-    });
 }
 
 app.get('/get_date', function (req, res) {
