@@ -948,16 +948,13 @@ function unit(s) {
 
 function threshold(a, c, f, b) {
     var a = parseFloat(a) / f;
-    var b = parseFloat(b) / 100;
+    var b = parseFloat(b) ;
     var c = parseFloat(c);
     if (a < b) {
-
-    } else {
-
-    }
-    return false
-
-
+         return true
+    } 
+ return false
+ 
 }
 
 //判断nrv
@@ -968,10 +965,10 @@ function nrv(a, b, c) {
     var tmp = 100 * a / b;
     tmp = Math.round(tmp);
     if (c == tmp) {
-        return true
-    }else{
         return false
     }
+    return true
+    
 
 }
 
