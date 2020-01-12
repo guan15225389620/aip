@@ -137,7 +137,7 @@ function ocrText(str) {
     for (g = 0; g < s.length; g++) {
         if ((Object.keys(s[g])[0] === 'birth') || (Object.keys(s[g])[0] === 'day')) {
             s.splice(g--, 1)
-        } else if (Object.keys(s[g])[0] === 'msg' || Object.keys(s[g])[0] === 'manufacturer' || Object.keys(s[g])[0] === 'address' || Object.keys(s[g])[0] === 'place' || Object.keys(s[g])[0] === 'tel' || Object.keys(s[g])[0] === 'web' || Object.keys(s[g])[0] === 'office' ||Object.keys(s[g])[0] === 'storage') {
+        } else if (Object.keys(s[g])[0] === 'msg' || Object.keys(s[g])[0] === 'manufacturer' || Object.keys(s[g])[0] === 'address' || Object.keys(s[g])[0] === 'place' || Object.keys(s[g])[0] === 'tel' || Object.keys(s[g])[0] === 'web' || Object.keys(s[g])[0] === 'office' ) {
             if (s[g][Object.keys(s[g])[0]]) {
                 strs = strs + s[g][Object.keys(s[g])[0]]
             }
