@@ -31,7 +31,7 @@ var client = new AipOcr(APP_ID, API_KEY, SECRET_KEY);
 var burdens = [['burden_ban', '猴头', '肠衣', '豆油', '太阳蛋', '方包片', '球包菜', '组织蛋白', '糖烯', '口服葡萄糖', '活力钙', '调味品', '闽姜', '糕饼专用油', '小香', '香料', '香精', '鲜肉', '碘盐', '酵母提取物', '棕油', '味料', '陈年老汤', 'I+G'
 ],
     ['food_ban', '蟾酥', '藜芦', '颠茄', '雷公藤', '雄黄', '硫磺', '斑蝥', '黄花夹竹桃', '雪上一枝蒿', '铃兰', '铁棒槌', '莽草', '鬼臼', '骆驼蓬', '杠柳皮', '香加皮', '草乌', '砒霜', '红砒', '白砒', '砒石', '牵牛子', '洋金花', '洋地黄', '鱼藤', '青娘虫', '闹羊花', '河豚', '昆明山海棠', '京大戟', '丽江山慈姑', '羊踯躅', '羊角拗', '红粉', '红茴香', '红豆杉', '红升丹', '罂粟壳', '米壳', '朱砂', '夹竹桃', '八角莲', '八里麻', '千金子', '土青木香', '山莨菪', '川乌', '广防己', '马桑叶', '马钱子', '六角莲', '天仙子', '巴豆', '水银', '长春花', '甘遂', '生天南星', '生半夏', '生白附子', '生狼毒', '白降丹', '石蒜', '关木通', '农吉痢'],
-    ['add_ban', 'VC钠', '异VC钠', '味素', 'HBA-BN10', '5-呈味核苷酸二钠', 'α-淀粉酶', '笨甲酸钠', '食品添剂', '香精', '红曲米粉', '牛膏']
+    ['add_ban', 'VC钠','EVC钠', '异VC钠', '味素', 'HBA-BN10', '5-呈味核苷酸二钠', 'α-淀粉酶', '笨甲酸钠', '食品添剂', '香精', '红曲米粉', '牛膏']
 ]
 
 function ocr(image, callback) {
@@ -97,7 +97,7 @@ function ocrText(str) {
         'office': ['邮政', '邮件', 'E-mail'],
         'day': ['生产日期'],
         'storage': ['贮存条件', '保存方法', '贮存', '保存'],
-        'sc': ['生产许可证编号', 'sc', '食证字', '生产许可', 'qs'],
+        'sc': ['生产许可证编号', 'sc', '食证字', '生产许可', 'qs','食作坊'],
         'birth': ['营养成分表']
     }
 
@@ -137,7 +137,7 @@ function ocrText(str) {
     for (g = 0; g < s.length; g++) {
         if ((Object.keys(s[g])[0] === 'birth') || (Object.keys(s[g])[0] === 'day')) {
             s.splice(g--, 1)
-        } else if (Object.keys(s[g])[0] === 'msg' || Object.keys(s[g])[0] === 'manufacturer' || Object.keys(s[g])[0] === 'address' || Object.keys(s[g])[0] === 'place' || Object.keys(s[g])[0] === 'tel' || Object.keys(s[g])[0] === 'web' || Object.keys(s[g])[0] === 'office') {
+        } else if (Object.keys(s[g])[0] === 'msg' || Object.keys(s[g])[0] === 'manufacturer' || Object.keys(s[g])[0] === 'address' || Object.keys(s[g])[0] === 'place' || Object.keys(s[g])[0] === 'tel' || Object.keys(s[g])[0] === 'web' || Object.keys(s[g])[0] === 'office' ||Object.keys(s[g])[0] === 'storage') {
             if (s[g][Object.keys(s[g])[0]]) {
                 strs = strs + s[g][Object.keys(s[g])[0]]
             }
@@ -350,8 +350,13 @@ function ban(str, burden) {
         }
 
         for (var i = 1; i < arr.length; i++) {
-            if (str.indexOf(arr[i]) > -1) {
-                res = res + arr[i] + warn
+            if (str.indexOf(arr[i]) > -1 ) {
+                if(str.indexOf('食用香精') >-1 ||str.indexOf('食用盐') >-1||str.indexOf('食盐') >-1  ){
+                    res = res
+                }else{
+                    res = res + arr[i] + warn
+                }
+               
             }
         }
     }
@@ -369,8 +374,15 @@ function errCode(json, dataList, perServing, date) {
             var value = json[i][key]
             if (key) {
                 if (json[i][key] === 'undefined') {
-                    error = error + key + '识别结果为空' + '\n';
-                    coloer = 1
+                    if (key == 'weight') { 
+                        error = error + '请核对产品名称'+ '\n';
+                        coloer = 1
+
+                    }else{
+                        error = error + key + '识别结果为空' + '\n';
+                        coloer = 1
+                    }
+                   
 
                 } else if ((key == 'burden')) {
 
@@ -379,6 +391,10 @@ function errCode(json, dataList, perServing, date) {
                         error = error + '根据GB7718-2011第4.1.3.1.1条相关规定：配料表应以“配料”或“配料表”为引导词。' + '\n';
                     }
 
+                    if(value.indexof('氢') >-1 || value.indexof(' 代可可脂') >-1){
+                        coloer = 2
+                        error = error + '请核验营养成分表中是否存在反式脂肪酸' + '\n';
+                    }
                     var warn = ban(value, burdens);
                     if (warn) {
                         error = error + warn
