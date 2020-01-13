@@ -478,8 +478,6 @@ function errCode(json, dataList, perServing, date) {
 
         for (var j = 0; j < data.length; j++) {
             var key = data[j];
-
-
             if (dataList[key][0] === 'undefined' && dataList[key][1] === 'undefined') {
                 error = error + key + '违反GB28050-2011第6.2条相关规定:所有预包装食品营养标签强制标示能量和各营养素名称、顺序、单位、修约间隔、“0”界限值应符合规定，当不标识某营养成分时，依序上移' + '\n';
                 coloer = 2
@@ -819,7 +817,7 @@ function errCode(json, dataList, perServing, date) {
         }
 
         if (a != 'undefined' && b != 'undefined' && c != 'undefined' && d != 'undefined' && e != 'undefined') {
-            var status = 1
+            let status = 1
             if (unit(perServing).indexOf('ml') != -1) {
                 status = 2;
             }
@@ -844,6 +842,7 @@ function errCode(json, dataList, perServing, date) {
             } else {
                 console.log(status,perServing,unit(perServing).indexOf('ml'))
                 if (status = 2) {
+                    console.log(status,'液体')
                     if ((b * 420 / a) >= 6 || b > 6) {
                         error = error + '含量声称方式可以使用高,或富含蛋白质' + '\n';
                         coloer = 2
