@@ -474,8 +474,9 @@ function errCode(json, dataList, perServing, date) {
         var a, b, c, d, e;
         var f = parseFloat(perServing) / 100;
         var h = 1
-        if (unit(perServing).indexOf('ml') > -1) {
+        if (unit(perServing).indexOf('ml') != -1) {
             h = 2;
+            console.log(unit(perServing),perServing)
         }
 
 
