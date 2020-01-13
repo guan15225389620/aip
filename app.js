@@ -817,9 +817,9 @@ function errCode(json, dataList, perServing, date) {
         }
 
         if (a != 'undefined' && b != 'undefined' && c != 'undefined' && d != 'undefined' && e != 'undefined') {
-            let status = 1
+            var  status = true
             if (unit(perServing).indexOf('ml') != -1) {
-                status = 2;
+                status = false;
             }
             if (a < 0.9 * (b * 17 + c * 37 + d * 17) || a > 1.1 * (b * 17 + c * 37 + d * 17)) {
                 error = error + '能量数值标示错误' + '\n';
@@ -841,7 +841,7 @@ function errCode(json, dataList, perServing, date) {
                 coloer = 2
             } else {
                 console.log(status,perServing,unit(perServing).indexOf('ml'))
-                if (status = 2) {
+                if (!status) {
                     console.log(status,'液体')
                     if ((b * 420 / a) >= 6 || b > 6) {
                         error = error + '含量声称方式可以使用高,或富含蛋白质' + '\n';
