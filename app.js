@@ -214,15 +214,20 @@ app.post('/getOcrText', function (req, res) {
 
 
 app.post('/updateOcrText', function (req, res) {
-    console.log(req.body);
+
     var tableText = req.body.tableText;
     var chatid = req.body.chatid;
     var dataList = req.body.dataList;
     var perServing = req.body.perServing;
     var date = req.body.date
+    var check_status = true
+    if (unit(perServing).indexOf('ml') != -1) {
+        check_status = false;
+    }
+    console.log(check_status, dataList)
     if (((chatid && tableText && date) || (dataList && perServing))) {
         //数据库更新
-        res.json(errCode(tableText, dataList, perServing))
+        res.json(errCode(tableText, dataList, perServing, check_status))
     } else {
         res.send('err tableText、chatid、dataList、ShelfLife数据不全无法显示')
     }
@@ -364,7 +369,7 @@ function ban(str, burden) {
 }
 
 
-function errCode(json, dataList, perServing, date) {
+function errCode(json, dataList, perServing, check_status) {
     var errCode = {}
     var error = ''
     var coloer = 0
@@ -473,7 +478,6 @@ function errCode(json, dataList, perServing, date) {
         // }
         var a, b, c, d, e;
         var f = parseFloat(perServing) / 100;
-
 
 
         for (var j = 0; j < data.length; j++) {
@@ -817,10 +821,8 @@ function errCode(json, dataList, perServing, date) {
         }
 
         if (a != 'undefined' && b != 'undefined' && c != 'undefined' && d != 'undefined' && e != 'undefined') {
-            var  status = true
-            if (unit(perServing).indexOf('ml') != -1) {
-                status = false;
-            }
+
+
             if (a < 0.9 * (b * 17 + c * 37 + d * 17) || a > 1.1 * (b * 17 + c * 37 + d * 17)) {
                 error = error + '能量数值标示错误' + '\n';
                 coloer = 2
@@ -830,7 +832,7 @@ function errCode(json, dataList, perServing, date) {
                 if (a <= 17) {
                     error = error + '含量声称方式可以使用无能量' + '\n';
                     coloer = 2
-                } else if ((status = 1 && a <= 170) || (status = 2 && a <= 80)) {
+                } else if ((check_status && a <= 170) || (!check_status && a <= 80)) {
                     error = error + '含量声称方式可以使用低能量' + '\n';
                     coloer = 2
                 }
@@ -840,9 +842,8 @@ function errCode(json, dataList, perServing, date) {
                 error = error + '含量声称方式可以使用低蛋白质' + '\n';
                 coloer = 2
             } else {
-                console.log(status,perServing,unit(perServing).indexOf('ml'))
-                if (!status) {
-                    console.log(status,'液体')
+                if (!check_status) {
+                    console.log(check_status, '液体')
                     if ((b * 420 / a) >= 6 || b > 6) {
                         error = error + '含量声称方式可以使用高,或富含蛋白质' + '\n';
                         coloer = 2
@@ -865,7 +866,7 @@ function errCode(json, dataList, perServing, date) {
             if (c <= 0.2) {
                 error = error + '含量声称方式可以使用无或者不含脂肪' + '\n';
                 coloer = 2
-            } else if ((status = 1 && c <= 3) || (status = 2 && c <= 1.5)) {
+            } else if ((check_status = 1 && c <= 3) || (check_status = 2 && c <= 1.5)) {
                 error = error + '含量声称方式可以使用低脂肪' + '\n';
                 coloer = 2
             }
