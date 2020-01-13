@@ -842,6 +842,7 @@ function errCode(json, dataList, perServing, date) {
                 coloer = 2
             } else {
                 if (h = 2) {
+                    console.log('液体',h,perServing)
                     if ((b * 420 / a) >= 6 || b > 6) {
                         error = error + '含量声称方式可以使用高,或富含蛋白质' + '\n';
                         coloer = 2
@@ -850,6 +851,8 @@ function errCode(json, dataList, perServing, date) {
                         coloer = 2
                     }
                 } else {
+
+                    console.log('固体',h,perServing)
                     if (b >= 12) {
                         error = error + '含量声称方式可以使用高,或富含蛋白质' + '\n';
                         coloer = 2
