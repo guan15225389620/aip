@@ -852,7 +852,7 @@ function errCode(json, dataList, perServing, date) {
                         coloer = 2
                     }
                 } else {
-
+                    unit(perServing).indexOf('ml')
                     console.log('固体',h,perServing)
                     if (b >= 12) {
                         error = error + '含量声称方式可以使用高,或富含蛋白质' + '\n';
