@@ -473,9 +473,9 @@ function errCode(json, dataList, perServing, date) {
         // }
         var a, b, c, d, e;
         var f = parseFloat(perServing) / 100;
-        var status = 1
+        var h = 1
         if (unit(perServing).indexOf('ml')) {
-            status = 2;
+            h = 2;
         }
 
 
@@ -836,19 +836,34 @@ function errCode(json, dataList, perServing, date) {
                     coloer = 2
                 }
             }
+
             if ((b * 17) < (0.05 * a)) {
                 error = error + '含量声称方式可以使用低蛋白质' + '\n';
                 coloer = 2
+            } else {
+                if (h = 2) {
+                    if (b < 6 && (b * 17) < (0.1 * a)) {
+                        error = error + '含量声称方式可以使用蛋白质来源,或含有蛋白质' + '\n';
+                        coloer = 2
 
-            } else if (b < 6 && (b * 17) < (0.05 * a)) {
-                error = error + '含量声称方式可以使用蛋白质来源,或含有蛋白质' + '\n';
-                coloer = 2
+                    } else if (((b * 420 / a) >= 3 && (b * 420 / a) < 6) || (b < 6 && (b * 17) < (0.2 * a))) {
 
-            } else if ((b * 420 / a) <= 3) {
+                        error = error + '含量声称方式可以使用高,或富含蛋白质' + '\n';
+                        coloer = 2
+                    }
+                } else {
+                    if (b < 6 && (b * 17) < (0.05 * a)) {
+                        error = error + '含量声称方式可以使用蛋白质来源,或含有蛋白质' + '\n';
+                        coloer = 2
 
-                error = error + '含量声称方式可以使用高,或富含蛋白质' + '\n';
-                coloer = 2
+                    } else if (((b * 420 / a) >= 6) || (b < 6 && (b * 17) < (0.1 * a))) {
+
+                        error = error + '含量声称方式可以使用高,或富含蛋白质' + '\n';
+                        coloer = 2
+                    }
+                }
             }
+
 
             if (c <= 0.2) {
                 error = error + '含量声称方式可以使用无或者不含脂肪' + '\n';
@@ -857,6 +872,8 @@ function errCode(json, dataList, perServing, date) {
                 error = error + '含量声称方式可以使用低脂肪' + '\n';
                 coloer = 2
             }
+
+
             if (c <= 0.5) {
                 error = error + '含量声称方式可以使用无或不含糖' + '\n';
                 coloer = 2
