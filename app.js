@@ -473,9 +473,9 @@ function errCode(json, dataList, perServing, date) {
         // }
         var a, b, c, d, e;
         var f = parseFloat(perServing) / 100;
-        var h = 1
+        var status = 1
         if (unit(perServing).indexOf('ml') != -1) {
-            h = 2;
+            status = 2;
             console.log(unit(perServing),perServing)
         }
 
@@ -832,7 +832,7 @@ function errCode(json, dataList, perServing, date) {
                 if (a <= 17) {
                     error = error + '含量声称方式可以使用无能量' + '\n';
                     coloer = 2
-                } else if ((h = 1 && a <= 170) || (h = 2 && a <= 80)) {
+                } else if ((status = 1 && a <= 170) || (status = 2 && a <= 80)) {
                     error = error + '含量声称方式可以使用低能量' + '\n';
                     coloer = 2
                 }
@@ -842,8 +842,8 @@ function errCode(json, dataList, perServing, date) {
                 error = error + '含量声称方式可以使用低蛋白质' + '\n';
                 coloer = 2
             } else {
-                console.log(h,perServing,unit(perServing).indexOf('ml'))
-                if (h = 2) {
+                console.log(status,perServing,unit(perServing).indexOf('ml'))
+                if (status = 2) {
                     if ((b * 420 / a) >= 6 || b > 6) {
                         error = error + '含量声称方式可以使用高,或富含蛋白质' + '\n';
                         coloer = 2
@@ -866,7 +866,7 @@ function errCode(json, dataList, perServing, date) {
             if (c <= 0.2) {
                 error = error + '含量声称方式可以使用无或者不含脂肪' + '\n';
                 coloer = 2
-            } else if ((h = 1 && c <= 3) || (h = 2 && c <= 1.5)) {
+            } else if ((status = 1 && c <= 3) || (status = 2 && c <= 1.5)) {
                 error = error + '含量声称方式可以使用低脂肪' + '\n';
                 coloer = 2
             }
