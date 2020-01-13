@@ -473,11 +473,7 @@ function errCode(json, dataList, perServing, date) {
         // }
         var a, b, c, d, e;
         var f = parseFloat(perServing) / 100;
-        var status = 1
-        if (unit(perServing).indexOf('ml') != -1) {
-            status = 2;
-            console.log(unit(perServing),perServing)
-        }
+
 
 
         for (var j = 0; j < data.length; j++) {
@@ -823,6 +819,10 @@ function errCode(json, dataList, perServing, date) {
         }
 
         if (a != 'undefined' && b != 'undefined' && c != 'undefined' && d != 'undefined' && e != 'undefined') {
+            var status = 1
+            if (unit(perServing).indexOf('ml') != -1) {
+                status = 2;
+            }
             if (a < 0.9 * (b * 17 + c * 37 + d * 17) || a > 1.1 * (b * 17 + c * 37 + d * 17)) {
                 error = error + '能量数值标示错误' + '\n';
                 coloer = 2
