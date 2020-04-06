@@ -225,7 +225,7 @@ app.post('/updateOcrText', function (req, res) {
     console.log(check_status, dataList)
     if (((chatid && tableText && date) || (dataList && perServing))) {
         //数据库更新
-        console.log(tableText)
+         console.log(tableText,perServing)
          if (unit(perServing).indexOf('ml') != -1) {
         check_status = false;
     }
