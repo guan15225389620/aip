@@ -431,7 +431,7 @@ function errCode(json, dataList, perServing, check_status) {
 
                 } else if (key == 'code') {
 
-                    if (value.indexOf('GB/T') === -1) {
+                  if ((value.indexOf('GB(/T)') > -1) || (value.indexOf('DB-') >  -1) || (value.indexOf('DSS') >  -1) ||(value.indexOf('GB/7') >  -1)|| (value.indexOf('GB/(T)') >  -1)|| (value.indexOf('GB/:') > -1)) {
                         coloer = 2
                         error = error + key + '根据GB7718-2011《食品安全国家标准 预包装食品标签通则》第4.1.10条相关规定：在国内生产并在国内销售的预包装食品（不包括进口预包装食品）应标示产品所执行的标准代号和顺序号。' + '\n';
                     }
