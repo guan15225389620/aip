@@ -227,6 +227,7 @@ app.post('/updateOcrText', function (req, res) {
     console.log(check_status, dataList)
     if (((chatid && tableText && date) || (dataList && perServing))) {
         //数据库更新
+        console.log(tableText)
         res.json(errCode(tableText, dataList, perServing, check_status))
     } else {
         res.send('err tableText、chatid、dataList、ShelfLife数据不全无法显示')
