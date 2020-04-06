@@ -400,8 +400,8 @@ function errCode(json, dataList, perServing, check_status) {
                         coloer = 2
                         error = error + '根据GB7718-2011第4.1.3.1.1条相关规定：配料表应以“配料”或“配料表”为引导词。' + '\n';
                     }
-
-                    if(vl.indexof('氢') >-1 || vl.indexof(' 代可可脂') >-1){
+                    
+                    if(vl.indexOf('氢') >-1 || vl.indexOf(' 代可可脂') >-1){
                         coloer = 2
                         error = error + '请核验营养成分表中是否存在反式脂肪酸' + '\n';
                     }
