@@ -382,7 +382,7 @@ function errCode(json, dataList, perServing, check_status) {
             var key = Object.keys(json[i])[0];
             var value = json[i][key]
             if (key) {
-                if (json[i][key] === 'undefined') {
+                if (json[i][key] === 'undefined'|| json[i][key] === '') {
                     if (key == 'weight') {
                         error = error + '请核对产品名称' + '\n';
                         coloer = 1
