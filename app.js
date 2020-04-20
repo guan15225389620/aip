@@ -395,7 +395,7 @@ function errCode(json, dataList, perServing, check_status) {
                         coloer = setColoer(coloer,1);
 
                     } else {
-                        error = error + key + '未检测到“'+error+'”项相关内容，不符合GB7718-2011第4.1.1条相关规定：直接向消费者提供的预包装食品标签标示应包括“'+error+'”。' + '\n';
+                       error = error + '未检测到“'+ key +'”项相关内容，不符合GB7718-2011第4.1.1条相关规定：直接向消费者提供的预包装食品标签标示应包括“'+ key +'”。' + '\n';
                         coloer = setColoer(coloer,2);
                     }
 
