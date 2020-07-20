@@ -1163,7 +1163,7 @@ function errCode(json, dataList, perServing, check_status) {
                         error = error + '净含量引导词错误。' + '\n';
                     }
 
-                    if (value.indexOf('l') === -1 && value.indexOf('ml') === -1 && value.indexOf('L') === -1 && value.indexOf('mL') === -1 && value.indexOf('g') === -1 && value.indexOf('kg') === -1 && value.indexOf('升') === -1 && value.indexOf('毫升') === -1 && value.indexOf('克') === -1 value.indexOf('千克') === -1) {
+                    if (value.indexOf('l') === -1 && value.indexOf('ml') === -1 && value.indexOf('L') === -1 && value.indexOf('mL') === -1 && value.indexOf('g') === -1 && value.indexOf('kg') === -1 && value.indexOf('升') === -1 && value.indexOf('毫升') === -1 && value.indexOf('克') === -1 && value.indexOf('千克') === -1) {
                         coloer = setColoer(coloer,2);
                         error = error + key + '根据GB7718-2011《食品安全国家标准 预包装食品标签通则》第4.1.5.2条相关规定：应依据法定计量单位，按以下形式标示包装物（容器）中食品的净含量：(a)液态食品，用体积升(L) (l)、毫升(mL) (ml)，或用质量克(g)、千克(kg)；(b)固态食品，用质量克(g)、千克(kg)；(c)半固态或黏性食品，用质量克(g)、千克(kg)或体积升(L) (l)、毫升(mL) (ml)。' + '\n';
                     }else if(value.indexOf('磅') === -1 && value.indexOf('加仑') === -1 ){
