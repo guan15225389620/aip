@@ -1141,7 +1141,7 @@ function errCode(json, dataList, perServing, check_status) {
                         coloer = setColoer(coloer,2);
                         error = error + '根据GB7718-2011第4.1.3.1.1条相关规定：配料表应以“配料”或“配料表”为引导词。' + '\n';
                     }
-                    console.log(vl)
+                    console.log(vl,json[i][key])
                     if(vl.indexOf('氢') >-1 ||vl.indexOf('人造奶油') >-1 ||vl.indexOf('植物奶油') >-1|| vl.indexOf('代可可脂') >-1 || vl.indexOf( '酥油') >-1){
                         coloer = setColoer(coloer,0);
                         if (dataList && (fszfsFlag == 0)){
@@ -1165,8 +1165,8 @@ function errCode(json, dataList, perServing, check_status) {
                     if (value.indexOf('l') === -1 && value.indexOf('ml') === -1 && value.indexOf('L') === -1 && value.indexOf('mL') === -1 && value.indexOf('g') === -1 && value.indexOf('kg') === -1 && value.indexOf('升') === -1 && value.indexOf('毫升') === -1 && value.indexOf('克') === -1 && value.indexOf('千克') === -1) {
                         coloer = setColoer(coloer,2);
                         error = error + key + '根据GB7718-2011《食品安全国家标准 预包装食品标签通则》第4.1.5.2条相关规定：应依据法定计量单位，按以下形式标示包装物（容器）中食品的净含量：(a)液态食品，用体积升(L) (l)、毫升(mL) (ml)，或用质量克(g)、千克(kg)；(b)固态食品，用质量克(g)、千克(kg)；(c)半固态或黏性食品，用质量克(g)、千克(kg)或体积升(L) (l)、毫升(mL) (ml)。' + '\n';
-                    }else if(value.indexOf('磅') === -1 && value.indexOf('加仑') === -1 ){
-                        error = error + key + '净含量未采用法定计量单位。'
+                    }else if(value.indexOf('磅') > -1 || value.indexOf('加仑') > -1 ){
+                        error = error + key + '未采用法定计量单位' + '\n';
                     }
 
                 } else if (key == 'sc') {
