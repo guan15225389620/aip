@@ -1141,8 +1141,8 @@ function errCode(json, dataList, perServing, check_status) {
                         coloer = setColoer(coloer,2);
                         error = error + '根据GB7718-2011第4.1.3.1.1条相关规定：配料表应以“配料”或“配料表”为引导词。' + '\n';
                     }
-                    console.log(vl,json[i][key])
-                    if(vl.indexOf('氢') >-1 ||vl.indexOf('人造奶油') >-1 ||vl.indexOf('植物奶油') >-1|| vl.indexOf('代可可脂') >-1 || vl.indexOf( '酥油') >-1){
+
+                    if(json[i][key].indexOf('氢') >-1 ||json[i][key].indexOf('人造奶油') >-1 ||json[i][key].indexOf('植物奶油') >-1|| json[i][key].indexOf('代可可脂') >-1 || json[i][key].indexOf( '酥油') >-1){
                         coloer = setColoer(coloer,0);
                         if (dataList && (fszfsFlag == 0)){
                             error = error + '营养成分表中应标示反式脂肪(酸)含量（GB28050-2011  4.4）' + '\n';
@@ -1170,7 +1170,6 @@ function errCode(json, dataList, perServing, check_status) {
                     }
 
                 } else if (key == 'sc') {
-
                     var num = value.replace(/[^0-9]/ig, "").toString();
                     var header = num.slice(0, 3)
                     if (value.indexOf('SC') === -1) {
