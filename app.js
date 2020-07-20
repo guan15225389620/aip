@@ -1137,7 +1137,7 @@ function errCode(json, dataList, perServing, check_status) {
                 } else if ((key == 'burden')) {
                     json[i][key] =  json[i][key].replace(/\ +/g,"")
                     var vl =  value.replace(/\ +/g,"").substring(0, 11)
-                    if (((vl.indexOf('配料') < 0)  || (vl.indexOf('原料') < 0)) || (vl.indexOf('主要配料') > -1)) {
+                    if (((vl.indexOf('配料') < 0)  && (vl.indexOf('原料') < 0)) || (vl.indexOf('主要配料') > -1)) {
                         coloer = setColoer(coloer,2);
                         error = error + '根据GB7718-2011第4.1.3.1.1条相关规定：配料表应以“配料”或“配料表”为引导词。' + '\n';
                     }
