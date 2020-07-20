@@ -427,13 +427,13 @@ function errCode(json, dataList, perServing, check_status) {
         for (var j = 0; j < data.length; j++) {
             var key = data[j];
             var errContent = key;
-            if (dataList[key][0]  || dataList[key][1] ) {
+            if (dataList[key][0]  && dataList[key][1] ) {
                 errContent = errContent +  '标签不能为空'
             }
             var k = norm(dataList[key][0]);
             var v = parseFloat(dataList[key][1]);
             if (k && dataList[key][1]) {
-                if(!isInt(dataList[key][1])){
+                if(dataList[key][1].indexOf('.')>-1){
                     error = error + key + '营养素参考值％（NRV％）修约间隔错误' + '\n';
                     coloer = setColoer(coloer,2);
                 }
