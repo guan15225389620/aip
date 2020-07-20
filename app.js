@@ -1109,13 +1109,13 @@ function errCode(json, dataList, perServing, check_status) {
             if(value) {
                 for (j in banList){
                     if(value.indexOf(banList[j]) > -1){
-                        error = error + '检测到'+ banList[j] +'”，此类用语可能违反GB7718-2011第3.3、3.4条及广告法相关规定。' + '\n';
+                        error = error + '检测到“'+ banList[j] +'”，此类用语可能违反GB7718-2011第3.3、3.4条及广告法相关规定。' + '\n';
                         coloer = setColoer(coloer,2);
                     }
                 }
                 for (k in bjList){
                     if(value.indexOf(bjList[k]) > -1){
-                        error = error + '检测到'+ bjList[k] +'”，，此类用语违反《食品安全法》第七十一条：食品和食品添加剂的标签、说明书，不得含有虚假内容，不得涉及疾病预防、治疗功能。' + '\n';
+                        error = error + '检测到“'+ bjList[k] +'”，，此类用语违反《食品安全法》第七十一条：食品和食品添加剂的标签、说明书，不得含有虚假内容，不得涉及疾病预防、治疗功能。' + '\n';
                         coloer = setColoer(coloer,2);
                     }
                 }
@@ -1141,7 +1141,7 @@ function errCode(json, dataList, perServing, check_status) {
                         coloer = setColoer(coloer,2);
                         error = error + '根据GB7718-2011第4.1.3.1.1条相关规定：配料表应以“配料”或“配料表”为引导词。' + '\n';
                     }
-
+                    console.log(vl)
                     if(vl.indexOf('氢') >-1 ||vl.indexOf('人造奶油') >-1 ||vl.indexOf('植物奶油') >-1|| vl.indexOf('代可可脂') >-1 || vl.indexOf( '酥油') >-1){
                         coloer = setColoer(coloer,0);
                         if (dataList && (fszfsFlag == 0)){
@@ -1149,7 +1149,6 @@ function errCode(json, dataList, perServing, check_status) {
                         } else {
                             error = error + '请核验营养成分表中是否存在反式脂肪酸' + '\n';
                         }
-
                     }
                     var warn = ban(value, burdens);
                     if (warn) {
