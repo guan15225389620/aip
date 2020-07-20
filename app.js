@@ -369,7 +369,7 @@ function ban(str, burden) {
                 if (str.indexOf('食用香精') > -1 || str.indexOf('食用盐') > -1 || str.indexOf('食盐') > -1) {
                     res = res
                 } else {
-                    res = res +' 检测到“' arr[i] + warn
+                    res = res + '检测到“' + arr[i] + warn
                 }
 
             }
