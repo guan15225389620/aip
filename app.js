@@ -427,7 +427,7 @@ function errCode(json, dataList, perServing, check_status) {
         for (var j = 0; j < data.length; j++) {
             var key = data[j];
             var errContent = key;
-            if (dataList[key][0]  && dataList[key][1] ) {
+            if (!dataList[key][0]  && !dataList[key][1] ) {
                 errContent = errContent +  '标签不能为空'
             }
             var k = norm(dataList[key][0]);
@@ -1108,13 +1108,13 @@ function errCode(json, dataList, perServing, check_status) {
             var value = json[i][key];
             if(value) {
                 for (j in banList){
-                    if(value.indexOf(j) > -1){
+                    if(value.indexOf(banList[j]) > -1){
                         error = error + '检测到'+ banList[j] +'”，此类用语可能违反GB7718-2011第3.3、3.4条及广告法相关规定。' + '\n';
                         coloer = setColoer(coloer,2);
                     }
                 }
                 for (k in bjList){
-                    if(value.indexOf(k) > -1){
+                    if(value.indexOf(bjList[k]) > -1){
                         error = error + '检测到'+ bjList[k] +'”，，此类用语违反《食品安全法》第七十一条：食品和食品添加剂的标签、说明书，不得含有虚假内容，不得涉及疾病预防、治疗功能。' + '\n';
                         coloer = setColoer(coloer,2);
                     }
@@ -1158,7 +1158,7 @@ function errCode(json, dataList, perServing, check_status) {
                     }
 
                 } else if (key == 'weight') {
-                    if ((vl.indexOf('净含量') < 0) && (vl.indexOf('规格') < 0)) {
+                    if ((value.indexOf('净含量') < 0) && (value.indexOf('规格') < 0)) {
                         coloer = setColoer(coloer,2);
                         error = error + '净含量引导词错误。' + '\n';
                     }
